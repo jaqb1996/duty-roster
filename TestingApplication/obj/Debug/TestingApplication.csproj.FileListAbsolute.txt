@@ -1,0 +1,10 @@
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\bin\Debug\TestingApplication.exe.config
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\bin\Debug\TestingApplication.exe
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\bin\Debug\TestingApplication.pdb
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\bin\Debug\ClassLibrary.dll
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\bin\Debug\ClassLibrary.pdb
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\obj\Debug\TestingApplication.csprojAssemblyReference.cache
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\obj\Debug\TestingApplication.csproj.CoreCompileInputs.cache
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\obj\Debug\TestingApplication.csproj.CopyComplete
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\obj\Debug\TestingApplication.exe
+C:\Users\jaqbk\source\repos\DutyRoster\TestingApplication\obj\Debug\TestingApplication.pdb
