@@ -11,8 +11,8 @@ namespace ClassLibrary.Calculations
 {
     public class HolidayNightHoursCalculator : ICalculatorReturningNumberForEmployee
     {
-        const double HoursFromNotHolidayToHoliday = 1;
-        const double HoursForHoliday = 4;
+        const double HoursFoNightFromNotHolidayToHoliday = 1;
+        const double HoursForHolidayNight = 4;
         public string Name => "Kalkulator godzin nocnych świątecznych";
         public string Description => "Kalkulator obliczający liczbę godzin nocnych świątecznych dla każdego pracownika";
         public Dictionary<IEmployeePresentationData, double> Calculate(ISchedule schedule)
@@ -30,14 +30,14 @@ namespace ClassLibrary.Calculations
                     if (planForDay.Symbol == "N")
                     {
                         // This is not a holiday but the next day is
-                        if (!HolidayChecker.isHoliday(date) && HolidayChecker.isHoliday(date.AddDays(1)))
+                        if (!HolidayChecker.IsHoliday(date) && HolidayChecker.IsHoliday(date.AddDays(1)))
                         {
-                            numberOfHours += HoursFromNotHolidayToHoliday;
+                            numberOfHours += HoursFoNightFromNotHolidayToHoliday;
                         }
                         // This is a holiday
-                        else if (HolidayChecker.isHoliday(date))
+                        else if (HolidayChecker.IsHoliday(date))
                         {
-                            numberOfHours += HoursForHoliday;
+                            numberOfHours += HoursForHolidayNight;
                         }
                     }
                     output.Add(employee, numberOfHours);

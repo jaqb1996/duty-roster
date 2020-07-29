@@ -11,7 +11,7 @@ namespace ClassLibrary.DataAccess
         /// </summary>
         /// <param name="id">Id of scbedule to load</param>
         /// <returns>Schedule loaded</returns>
-        ScheduleModel LoadSchedule(int id);
+        ISchedule LoadSchedule(int id);
         /// <summary>
         /// Reads information about shedules in database
         /// </summary>

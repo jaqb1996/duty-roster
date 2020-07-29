@@ -106,10 +106,10 @@ namespace ClassLibrary.DataAccess.CSV
             return id;
         }
 
-        public ScheduleModel LoadSchedule(int id)
+        public ISchedule LoadSchedule(int id)
         {
             ISchedulePresentationData schedule = GetScheduleFromId(id);
-            ScheduleModel output = new ScheduleModel(schedule.Id, schedule.Name, schedule.StartingDay, schedule.LastDay);
+            ISchedule output = new ScheduleModel(schedule.Id, schedule.Name, schedule.StartingDay, schedule.LastDay);
 
             List<WorkingPlan> plans = GetWorkingPlans();
             List<IEmployeePresentationData> employeeData = GetEmployees();

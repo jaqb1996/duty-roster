@@ -15,36 +15,6 @@ namespace TestingApplication
     {
         static void Main(string[] args)
         {
-            //XmlDataAccess dataAccess = new XmlDataAccess();
-            //var files = dataAccess.ReadNamesOfAvailableSchedules();
-            //foreach (var f in files)
-            //{
-            //    Console.WriteLine(f);
-            //}
-
-            //ScheduleModel schedule = new ScheduleModel("Test", DateTime.Parse("1.1.2020"), DateTime.Parse("3.1.2020"));
-            //ScheduleModel schedule;
-            //while (true)
-            //{
-            //    bool newSchedule = ShowListOfSchedules(out int choice, out List<string> scheduleNames);
-
-            //    if (newSchedule)
-            //    {
-            //        //schedule.AddEmployee("Zenek", "Blues");
-            //        //Console.WriteLine(schedule.FullSchedule());
-            //        //dataAccess.SaveSchedule(GetNewSchedule());
-            //    }
-            //    else
-            //    {
-            //        schedule = dataAccess.LoadSchedule(scheduleNames[choice]);
-            //        break;
-            //        //Console.WriteLine(schedule.FullSchedule());
-            //    }
-            //}
-            //Console.WriteLine(schedule.FullSchedule());
-
-            //dataAccess.CreateSchedule("abc", new DateTime(2020, 01, 01), new DateTime(2020, 01, 10));
-            //dataAccess.CreateSchedule("xyz", new DateTime(2019, 02, 01), new DateTime(2019, 01, 15));
             if (Directory.Exists("Data"))
             {
                 Directory.Delete("Data", true);
@@ -78,7 +48,7 @@ namespace TestingApplication
             dataAccess.AddWorkingOptionForDay(scheduleID, id_Wilk, new DateTime(2020, 02, 02), workingOptions.First());
             dataAccess.AddWorkingOptionForDay(scheduleID, id_Iksinski, new DateTime(2020, 02, 03), workingOptions.First());
 
-            ScheduleModel schedule = dataAccess.LoadSchedule(scheduleID);
+            ISchedule schedule = dataAccess.LoadSchedule(scheduleID);
 
             Console.WriteLine(schedule.Name);
 
@@ -94,39 +64,5 @@ namespace TestingApplication
             Console.WriteLine("Nacisnij dowolny przycisk aby zamknac program...");
             Console.ReadKey();
         }
-
-        //private static ScheduleModel GetNewSchedule()
-        //{
-        //    Console.WriteLine("Podaj nazwe nowego grafiku: ");
-        //    string newName = Console.ReadLine();
-        //    Console.WriteLine("Podaj date poczatkowa (dd.mm.rrrr): ");
-        //    DateTime startDate = DateTime.Parse(Console.ReadLine());
-        //    Console.WriteLine("Podaj date koncowa (dd.mm.rrrr): ");
-        //    DateTime lastDate = DateTime.Parse(Console.ReadLine());
-        //    return new ScheduleModel(newName, startDate, lastDate);
-        //}
-
-        //private static bool ShowListOfSchedules(out int choice, out List<string> scheduleNames)
-        //{
-        //    Console.WriteLine("Lista dostępnych grafików:");
-        //    scheduleNames = dataAccess.ReadNamesOfAvailableSchedules();
-        //    while (true)
-        //    {
-        //        for (int i = 0; i < scheduleNames.Count; i++)
-        //        {
-        //            Console.WriteLine($"[{i}] {scheduleNames[i]}");
-        //        }
-        //        Console.WriteLine($"[{scheduleNames.Count}] Nowy grafik");
-        //        bool success = int.TryParse(Console.ReadLine(), out choice);
-                
-        //        if (success && 0 <= choice && choice < scheduleNames.Count)
-        //        {
-        //            return false;
-        //        }
-        //        if (choice == scheduleNames.Count)
-        //            return true;
-        //        Console.WriteLine("Niepoprawny wybor. Sprobuj ponownie");
-        //    }
-        //}
     }
 }

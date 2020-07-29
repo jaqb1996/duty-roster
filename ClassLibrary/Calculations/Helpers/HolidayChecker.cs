@@ -8,7 +8,7 @@ namespace ClassLibrary.Calculations.Helpers
 {
     class HolidayChecker
     {
-        public static bool isHoliday(DateTime dt)
+        public static bool IsHoliday(DateTime dt)
         {
             if (dt.DayOfWeek == DayOfWeek.Saturday || dt.DayOfWeek == DayOfWeek.Sunday)
             {

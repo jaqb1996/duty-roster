@@ -1,0 +1,104 @@
+﻿<Window x:Class="WPFUI.CreateEmployeeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        mc:Ignorable="d"
+        Title="Nowy pracownik" Height="430.001" Width="445.923" FontSize="18" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Width" Value="160"/>
+            </Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Margin" Value="5"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                   Text="Utwórz nowego pracownika:" HorizontalAlignment="Center"/>
+        <Label Grid.Row="2" Grid.Column="1" Content="Imię:"/>
+        <TextBox Grid.Row="2" Grid.Column="2" x:Name="EmployeeFirstName" />
+        <Label Grid.Row="3" Grid.Column="1" Content="Nazwisko:"/>
+        <TextBox Grid.Row="3" Grid.Column="2" x:Name="EmployeeLastName" />
+        <GroupBox Header="Wybierz opcje pracy:" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="FontSize" Value="14"/>
+                    </Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Margin" Value="5"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Dostępne opcje:" 
+                   HorizontalContentAlignment="Center"/>
+                <ComboBox Name="AvailableOptionsComboBox" Grid.Row="1" Grid.Column="0"
+                      Margin="5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding GetSummary}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button x:Name="AddOptionButton" Grid.Row="2" Grid.Column="0"
+                    Content="Dodaj powyższą opcję" Click="AddOptionButton_Click"/>
+                <Button x:Name="NewOptionButton" Grid.Row="3" Grid.Column="0"
+                    Content="Utwórz nową opcję" Click="NewOptionButton_Click"/>
+                <Button x:Name="DeleteOptionButton" Grid.Row="4" Grid.Column="0"
+                    Content="Usuń zaznaczoną opcję" Click="DeleteOptionButton_Click"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Wybrane opcje:"
+                   HorizontalContentAlignment="Center"/>
+                <ListBox x:Name="OptionsForEmployeeListBox" Grid.Row="1" Grid.Column="1"
+                     Grid.RowSpan="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding GetSummary}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
+
+        <Button x:Name="CancelButton" Grid.Row="5" Grid.Column="1" 
+                Content="Anuluj" Click="CancelButton_Click"/>
+        <Button x:Name="OKButton" Grid.Row="5" Grid.Column="2" 
+                Content="OK" Click="OKButton_Click"/>
+
+    </Grid>
+</Window>
