@@ -51,6 +51,7 @@ namespace ClassLibrary.Models
             public bool Equals(IEmployeePresentationData other)
             {
                 return other != null &&
+                       Id == other.Id &&
                        FirstName == other.FirstName &&
                        LastName == other.LastName;
             }
@@ -58,6 +59,7 @@ namespace ClassLibrary.Models
             public override int GetHashCode()
             {
                 int hashCode = 1938039292;
+                hashCode = hashCode * -1521134295 + EqualityComparer<int>.Default.GetHashCode(Id);
                 hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FirstName);
                 hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LastName);
                 return hashCode;

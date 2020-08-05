@@ -43,7 +43,7 @@ namespace WPFUI
                 Helpers.DisplayWorkingOptionError(ex);
                 return;
             }
-            ((MainWindow)Application.Current.MainWindow).DataAccess.AddWorkingOption(symbol, startingHour, workingTime);
+            AppResources.DataAccess.AddWorkingOption(symbol, startingHour, workingTime);
             Close();
         }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,11 +51,31 @@ namespace ClassLibrary.Models
         }
         public void ChangeWorkDay( int employeeID, DateTime date, string symbol, DateTime startingHour, TimeSpan workingTime)
         {
+            int employeeIndex = GetEmployeeIndex(employeeID);
+            int index = this.GetIndexOfDate(date);
+            Employees[employeeIndex].ChangeWorkDay(index, symbol, startingHour, workingTime);
+        }
+
+        public void IterateOverAllDays(Action<DateTime> actionForDay)
+        {
+            for (DateTime day = StartingDay; day <= LastDay; day = day.AddDays(1))
+            {
+                actionForDay.Invoke(day);
+            }
+        }
+
+        public IWorkingOption PlanForDay(int employeeID, DateTime date)
+        {
+            int employeeIndex = GetEmployeeIndex(employeeID);
+            int dateIndex = this.GetIndexOfDate(date);
+            return Employees[employeeIndex].WorkingPlan[dateIndex];
+        }
+        private int GetEmployeeIndex(int employeeID)
+        {
             int employeeIndex = Employees.FindIndex(0, e => e.Id == employeeID);
             if (employeeIndex == -1)
                 throw new Exception("Such employee does not exist in the schedule");
-            int index = this.GetIndexOfDate(date);
-            Employees[employeeIndex].ChangeWorkDay(index, symbol, startingHour, workingTime);
+            return employeeIndex;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace WPFUI
         {   
             InitializeComponent();
 
-            List<ISchedulePresentationData> schedules = ((MainWindow)Application.Current.MainWindow).DataAccess.ReadNamesOfAvailableSchedules();
+            List<ISchedulePresentationData> schedules = AppResources.DataAccess.ReadNamesOfAvailableSchedules();
             availableSchedulesListbox.ItemsSource = schedules;
 
         }
@@ -39,9 +39,9 @@ namespace WPFUI
                 return;
             }
             int id = ((ISchedulePresentationData)availableSchedulesListbox.SelectedItem).Id;
-            ((MainWindow)Application.Current.MainWindow).Schedule = ((MainWindow)Application.Current.MainWindow).DataAccess.LoadSchedule(id);
-            //MessageBox.Show($"{((MainWindow)Application.Current.MainWindow).Schedule.Employees[0].WorkingPlan[0].Symbol}");
+            AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+
             Close();
         }
 

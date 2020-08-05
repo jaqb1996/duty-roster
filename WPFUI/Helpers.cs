@@ -49,5 +49,7 @@ namespace WPFUI
             }
             MessageBox.Show(message, "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+        public static readonly string firstNamePropertyName = "firstName";
+        public static readonly string lastNamePropertyName = "lastName";
     }
 }

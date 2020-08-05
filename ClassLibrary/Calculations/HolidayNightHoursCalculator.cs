@@ -13,8 +13,12 @@ namespace ClassLibrary.Calculations
     {
         const double HoursFoNightFromNotHolidayToHoliday = 1;
         const double HoursForHolidayNight = 4;
-        public string Name => "Kalkulator godzin nocnych świątecznych";
-        public string Description => "Kalkulator obliczający liczbę godzin nocnych świątecznych dla każdego pracownika";
+        public string Name => "Godziny nocne świąteczne";
+        public string Description => "Kalkulator obliczający liczbę godzin nocnych świątecznych dla każdego pracownika. " +
+                                     "Bazuje na nazwaniu nocnej zmiany symbolem N";
+
+        public string ResultName => "Liczba godzin";
+
         public Dictionary<IEmployeePresentationData, double> Calculate(ISchedule schedule)
         {
             Dictionary<IEmployeePresentationData, double> output = new Dictionary<IEmployeePresentationData, double>();
@@ -39,9 +43,9 @@ namespace ClassLibrary.Calculations
                         {
                             numberOfHours += HoursForHolidayNight;
                         }
-                    }
-                    output.Add(employee, numberOfHours);
+                    }  
                 });
+                output.Add(employee, numberOfHours);
             }
             return output;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary.Calculations.Helpers
 {
-    class HolidayChecker
+    public class HolidayChecker
     {
         public static bool IsHoliday(DateTime dt)
         {

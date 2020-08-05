@@ -13,23 +13,16 @@ namespace ClassLibrary.Helpers
         {   
             return (schedule.LastDay - schedule.StartingDay).Days + 1;
         }
-        public static void IterateOverAllDays(this ISchedulePresentationData schedule, Action<DateTime> action)
-        {
-            for (DateTime day = schedule.StartingDay; day <= schedule.LastDay; day = day.AddDays(1))
-            {
-                action.Invoke(day);
-            }
-        }
         public static int GetIndexOfDate(this ISchedulePresentationData schedule, DateTime date)
         {
             int i = 0;
             for (DateTime day = schedule.StartingDay; day <= schedule.LastDay; day = day.AddDays(1))
             {
-                if (day == date)
+                if (day.Day == date.Day && day.Month == date.Month && day.Year == date.Year)
                     return i;
                 i++;
             }
-            throw new Exception("Such date does not exist in the schedule");
+            throw new ArgumentException("Such date does not exist in the schedule");
         }
     }
 }

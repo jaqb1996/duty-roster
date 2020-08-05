@@ -32,7 +32,7 @@ namespace WPFUI
         }
         public void RefreshListOfEmployees()
         {
-            List<IEmployeePresentationData> employees = ((MainWindow)Application.Current.MainWindow).DataAccess.ReadNamesOfAvailableEmployees();
+            List<IEmployeePresentationData> employees = AppResources.DataAccess.ReadNamesOfAvailableEmployees();
             availableEmployeesListbox.ItemsSource = employees;
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -42,12 +42,17 @@ namespace WPFUI
 
         private void AddSelectedButton_Click(object sender, RoutedEventArgs e)
         {
+            if (availableEmployeesListbox.SelectedItem == null)
+            {
+                MessageBox.Show("Wybierz najpierw pracownika", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             foreach (var emp in availableEmployeesListbox.SelectedItems)
             {
                 int employeeID = ((IEmployeePresentationData)emp).Id;
-                int scheduleID = ((MainWindow)Application.Current.MainWindow).Schedule.Id;
-                ((MainWindow)Application.Current.MainWindow).DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
-                ((MainWindow)Application.Current.MainWindow).Schedule = ((MainWindow)Application.Current.MainWindow).DataAccess.LoadSchedule(scheduleID);
+                int scheduleID = AppResources.Schedule.Id;
+                AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
+                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
                 ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             }
             Close();

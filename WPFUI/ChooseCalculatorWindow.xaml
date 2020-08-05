@@ -1,0 +1,52 @@
+﻿<Window x:Class="WPFUI.ChooseCalculatorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFUI"
+        mc:Ignorable="d"
+        Title="Wybierz obliczenia" Height="266.925" Width="800" WindowStartupLocation="CenterScreen"
+        FontSize="18">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <!--Row 1-->
+        <Label Grid.Row="1" Grid.Column="1" Content="Dostępne obliczenia:"/>
+        <Label Grid.Row="1" Grid.Column="2" Content="Opis:"/>
+        <!--Row 2-->
+        <ComboBox Name="AvailableCalculatorsComboBox" Grid.Row="2" 
+                  Grid.Column="1" Margin="10" Height="30" 
+                  Text="Wybierz kalkulator" SelectionChanged="AvailableCalculatorsComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBox x:Name="DescriptionTextBox" Grid.Row="2" Grid.Column="2"
+                 Grid.RowSpan="2" MinLines="5" TextWrapping="Wrap"
+                 />
+        
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="CancelButton" Content="Anuluj" Width="100"
+                    Height="40" Margin="0,30" Click="CancelButton_Click"/>
+            <Button x:Name="OKButton" Content="OK" 
+                    Width="100" Height="40" Margin="0,30" Grid.Column="1" Click="OKButton_Click"/>
+        </Grid>
+    </Grid>
+</Window>

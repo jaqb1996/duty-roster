@@ -42,8 +42,8 @@ namespace WPFUI
             DateTime startingDay = (DateTime)FirstDayPicker.SelectedDate;
             DateTime lastDay = (DateTime)LastDayPicker.SelectedDate;
 
-            int id = ((MainWindow)Application.Current.MainWindow).DataAccess.CreateSchedule(name, startingDay, lastDay);
-            ((MainWindow)Application.Current.MainWindow).Schedule = ((MainWindow)Application.Current.MainWindow).DataAccess.LoadSchedule(id);
+            int id = AppResources.DataAccess.CreateSchedule(name, startingDay, lastDay);
+            AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
 
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             Close();

@@ -32,7 +32,7 @@ namespace WPFUI
         private void Window_Activated(object sender, EventArgs e)
         {
             // Refresh available options on Window_Activated event to reflect changes done by other windows
-            availableOptions = ((MainWindow)Application.Current.MainWindow).DataAccess.ReadAvailableWorkingOptions();
+            availableOptions = AppResources.DataAccess.ReadAvailableWorkingOptions();
             AvailableOptionsComboBox.ItemsSource = availableOptions;
         }
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
@@ -59,13 +59,12 @@ namespace WPFUI
                 MessageBox.Show("Podaj imię oraz nazwisko pracownika", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            var dataAccess = ((MainWindow)Application.Current.MainWindow).DataAccess;
             // Add employee to database
-            int employeeID = dataAccess.AddEmployee(firstName, lastName);
+            int employeeID = AppResources.DataAccess.AddEmployee(firstName, lastName);
             // Connect chosen working options with employee 
             foreach (var option in addedOptions)
             {
-                dataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
+                AppResources.DataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
             }
 
             Close();

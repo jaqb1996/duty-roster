@@ -31,6 +31,16 @@ namespace WPFUI
             EmployeeNameTextBlock.Text = $"{employeeFirstName} {employeeLastName}";
             DateTextBlock.Text = date.ToString("dd.MM.yyyy");
 
+            // Fill fields with current values if already modified
+            IWorkingOption plan = AppResources.Schedule.PlanForDay(employeeId, date);
+            string symbol = plan.Symbol;
+            if (symbol != "")
+            {
+                SymbolTextBox.Text = symbol;
+                StartingHourTextBox.Text = plan.StartingHour.ToString("hh:mm");
+                WorkingTimeTextBox.Text = plan.WorkingTime.ToString(@"hh\:mm");
+            }
+
             this.date = date;
             this.employeeId = employeeId;
         }
@@ -55,7 +65,7 @@ namespace WPFUI
                 Helpers.DisplayWorkingOptionError(ex);
                 return;
             }
-            ((MainWindow)Application.Current.MainWindow).Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
+            AppResources.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             sendInformationAboutModification();
             Close();
@@ -70,7 +80,7 @@ namespace WPFUI
             if (SymbolTextBox.Text == "")
                 return;
             // Fill starting hour and working time if employee has default working option with chosen symbol 
-            IEmployee employee = (from emp in ((MainWindow)Application.Current.MainWindow).Schedule.Employees where emp.Id == employeeId select emp).Single();
+            IEmployee employee = (from emp in AppResources.Schedule.Employees where emp.Id == employeeId select emp).Single();
             foreach (IWorkingOption option in employee.AvailableOptions)
             {
                 if (option.Symbol == SymbolTextBox.Text)

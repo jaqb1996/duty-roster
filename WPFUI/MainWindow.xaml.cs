@@ -36,8 +36,6 @@ namespace WPFUI
             ChooseScheduleWindow window = new ChooseScheduleWindow();
             window.ShowDialog();
         }
-        public IDataAccess DataAccess = new CSVDataAccess();
-        public ISchedule Schedule { get; set; } = null;
 
         public bool Modified = false;
 
@@ -50,7 +48,7 @@ namespace WPFUI
         /// </summary>
         public void RefreshSchedule()
         {
-            if (Schedule != null)
+            if (AppResources.Schedule != null)
             {
                 mainGrid.Columns.Clear();
 
@@ -60,10 +58,12 @@ namespace WPFUI
 
                 mainGrid.ItemsSource = rows;
                 
-                scheduleTitle.Text = $"Grafik \"{Schedule.Name}\"";
+                scheduleTitle.Text = $"Grafik \"{AppResources.Schedule.Name}\"";
 
             }
         }
+        
+        private readonly string idPropertyName = "Id";
         /// <summary>
         /// Prepares DataGrid columns headers and bindings 
         /// </summary>
@@ -72,7 +72,7 @@ namespace WPFUI
             DataGridTextColumn lastNameColumn = new DataGridTextColumn
             {
                 Header = "Nazwisko",
-                Binding = new Binding(lastNamePropertyName),
+                Binding = new Binding(Helpers.lastNamePropertyName),
                 IsReadOnly = true
             };
             mainGrid.Columns.Add(lastNameColumn);
@@ -80,12 +80,12 @@ namespace WPFUI
             DataGridTextColumn firstNameColumn = new DataGridTextColumn
             {
                 Header = "Imię",
-                Binding = new Binding(firstNamePropertyName),
+                Binding = new Binding(Helpers.firstNamePropertyName),
                 IsReadOnly = true
             };
             mainGrid.Columns.Add(firstNameColumn);
 
-            Schedule.IterateOverAllDays((day) =>
+            AppResources.Schedule.IterateOverAllDays((day) =>
             {
                 DataGridTextColumn column = new DataGridTextColumn
                 {
@@ -95,25 +95,22 @@ namespace WPFUI
                 mainGrid.Columns.Add(column);
             });
         }
-        // ExpandoObject is used because of variable number of days in different schedules
+        // ExpandoObject is used because of possibility of variable number of days in different schedules
         private List<ExpandoObject> rows;
 
-        private readonly string firstNamePropertyName = "firstName";
-        private readonly string lastNamePropertyName = "lastName";
-        private readonly string idPropertyName = "Id";
         private void PopulateRows()
         {
             rows = new List<ExpandoObject>();
             // Generate row for each employee
-            foreach (IEmployee employee in Schedule.Employees)
+            foreach (IEmployee employee in AppResources.Schedule.Employees)
             {
                 dynamic row = new ExpandoObject();
                 ((IDictionary<string, object>)row).Add(idPropertyName, employee.Id);
-                ((IDictionary<string, object>)row).Add(lastNamePropertyName, employee.LastName);
-                ((IDictionary<string, object>)row).Add(firstNamePropertyName, employee.FirstName);
+                ((IDictionary<string, object>)row).Add(Helpers.lastNamePropertyName, employee.LastName);
+                ((IDictionary<string, object>)row).Add(Helpers.firstNamePropertyName, employee.FirstName);
                 int i = 0;
                 // Generate as many fiels as schedule has days
-                Schedule.IterateOverAllDays((day) =>
+                AppResources.Schedule.IterateOverAllDays((day) =>
                 {
                     ((IDictionary<string, object>)row).Add(GetDatePropertyName(day), employee.WorkingPlan[i].Symbol);
                     i++;
@@ -129,17 +126,14 @@ namespace WPFUI
             window.ShowDialog();
         }
         
-
-        
         private string GetDatePropertyName(DateTime day)
         {
             return $"date{day.ToString(datePropertyFormat)}";
         }
-        
 
         private void newEmployeeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Schedule == null)
+            if (AppResources.Schedule == null)
             {
                 MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -148,17 +142,18 @@ namespace WPFUI
             window.Show();
         }
 
-
         private void mainGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
+            // Get necessary data for EditPlanForDayWindow and show it
             string dateString = e.Column.Header.ToString();
             DateTime date = DateTime.Parse(dateString);
             IDictionary<string, object> row = e.Row.Item as IDictionary<string, object>;
-            EditPlanForDayWindow window = new EditPlanForDayWindow(row[firstNamePropertyName].ToString(),
-                                                                   row[lastNamePropertyName].ToString(),
+            EditPlanForDayWindow window = new EditPlanForDayWindow(row[Helpers.firstNamePropertyName].ToString(),
+                                                                   row[Helpers.lastNamePropertyName].ToString(),
                                                                    (int)row[idPropertyName],
                                                                    date);
             window.ShowDialog();
+            // Stop editting - schedule has been already edited in EditPlanForDayWindow
             e.Cancel = true;
         }
 
@@ -166,10 +161,21 @@ namespace WPFUI
         {
             if (Modified)
             {
-                DataAccess.SaveSchedule(Schedule);
+                AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
                 Modified = false;
                 Title = "Grafik";
             }
+        }
+
+        private void calculationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AppResources.Schedule == null)
+            {
+                MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ChooseCalculatorWindow window = new ChooseCalculatorWindow();
+            window.ShowDialog();
         }
     }
 }

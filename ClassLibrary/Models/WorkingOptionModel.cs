@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 
 namespace ClassLibrary.Models
 {
@@ -8,7 +9,9 @@ namespace ClassLibrary.Models
         public string Symbol { get; set; }
         public TimeSpan WorkingTime { get; set; }
         public DateTime StartingHour { get; set; }
-       
+
+        public string GetSummary => $"{Symbol}, {StartingHour.ToString("hh:mm")}, {WorkingTime.ToString(@"hh\:mm")}";
+
         public WorkingOptionModel()
         {
             Symbol = "";

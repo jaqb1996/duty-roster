@@ -8,5 +8,6 @@ namespace ClassLibrary.Models
         DateTime StartingHour { get; set; }
         string Symbol { get; set; }
         TimeSpan WorkingTime { get; set; }
+        string GetSummary { get; }
     }
 }

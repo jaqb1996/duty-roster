@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="Grafik" Height="450.754" Width="671.458" FontSize="18" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="auto"/>
@@ -22,11 +28,11 @@
                   CanUserReorderColumns="False" CanUserSortColumns="False"
                   MinHeight="250" BeginningEdit="mainGrid_BeginningEdit"/>
         <Button x:Name="newEmployeeButton" Content="Dodaj pracownika"
-                Grid.Row="3" Margin="10"
-                Click="newEmployeeButton_Click" HorizontalAlignment="Left"/>
+                Grid.Row="3" Click="newEmployeeButton_Click" 
+                HorizontalAlignment="Left"/>
         <Button x:Name="saveChangesButton"  Content="Zapisz zmiany" 
-                MaxWidth="130" Height="30" Grid.Row="3" 
-                Margin="10" HorizontalAlignment="Right" Click="saveChangesButton_Click"/>
+                Grid.Row="3" HorizontalAlignment="Right" 
+                Click="saveChangesButton_Click"/>
 
          <ItemsControl Grid.Row="4">
             <ItemsControl.ItemsPanel>
@@ -34,14 +40,9 @@
                     <WrapPanel />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Margin" Value="5"/>
-                    <Setter Property="Padding" Value="5"/>
-                </Style>
-            </ItemsControl.Resources>
             
-            <Button x:Name="calculationsButton" Content="Obliczenia" />
+            
+            <Button x:Name="calculationsButton" Content="Obliczenia" Click="calculationsButton_Click" />
             <Button x:Name="chooseScheduleButton" Content="Wybierz inny grafik" 
                     Click="chooseScheduleButton_Click"/>
         </ItemsControl>

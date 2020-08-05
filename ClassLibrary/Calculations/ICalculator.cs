@@ -10,5 +10,6 @@ namespace ClassLibrary.Calculations
     {
         string Name { get; }
         string Description { get; }
+        string ResultName { get; }
     }
 }

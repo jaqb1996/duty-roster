@@ -12,6 +12,9 @@ namespace ClassLibrary.Calculations
     {
         public string Name { get; } = "Godziny pracy w tygodniu";
         public string Description { get; } = "Kalkulator obliczający godziny pracy w tygodniu dla każdego pracownika";
+
+        public string ResultName => "Tydzień";
+
         public Dictionary<IEmployeePresentationData, List<double>> Calculate(ISchedule schedule)
         {
             Dictionary<IEmployeePresentationData, List<double>> output = new Dictionary<IEmployeePresentationData, List<double>>();  
@@ -35,5 +38,6 @@ namespace ClassLibrary.Calculations
             }
             return output;
         }
+
     }
 }
