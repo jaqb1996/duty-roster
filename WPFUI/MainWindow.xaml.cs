@@ -29,6 +29,8 @@ namespace WPFUI
         public MainWindow()
         {
             InitializeComponent();
+
+            saveChangesButton.DataContext = this;
         }
         // Let user choose schedule as soon as window loads 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -37,7 +39,7 @@ namespace WPFUI
             window.ShowDialog();
         }
 
-        public bool Modified = false;
+        public bool Modified { get; set; } = false;
 
         private readonly string dateHeaderFormat = "%d.%M.%y";
         private readonly string datePropertyFormat = "%d_%M_%y";
@@ -176,6 +178,33 @@ namespace WPFUI
             }
             ChooseCalculatorWindow window = new ChooseCalculatorWindow();
             window.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Ask user if he wants to save changes and take appropriate actions
+            if (Modified)
+            {
+                MessageBoxResult answer = MessageBox.Show("Czy chcesz zapisać zmiany?", "Wyjście", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                switch (answer)
+                {
+                    case MessageBoxResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                    case MessageBoxResult.Yes:
+                        AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                        Application.Current.Shutdown();
+                        break;
+                    case MessageBoxResult.No:
+                        Application.Current.Shutdown();
+                        break;
+                }
+            }
+            else
+            {
+                Application.Current.Shutdown();
+            }
+            
         }
     }
 }

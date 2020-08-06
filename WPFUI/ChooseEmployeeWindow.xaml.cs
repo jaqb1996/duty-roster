@@ -51,7 +51,21 @@ namespace WPFUI
             {
                 int employeeID = ((IEmployeePresentationData)emp).Id;
                 int scheduleID = AppResources.Schedule.Id;
-                AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
+                try
+                {
+                    AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
+                }
+                catch (InvalidOperationException)
+                {
+                    MessageBox.Show("Ten pracownik został już dodany", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Niestety operacja nie powiodła się", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                
                 AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
                 ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             }

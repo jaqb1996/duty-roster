@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,8 +10,9 @@ using System.Windows.Controls;
 
 namespace WPFUI
 {
-    class Helpers
+    static class Helpers
     {
+        
         public static (string symbol, DateTime startingHour, TimeSpan workingTime) WorkingOptionData(string symbol, string StartingHourString, string WorkingTimeString)
         {
             // Symbol validation
@@ -19,12 +21,12 @@ namespace WPFUI
                 throw new ArgumentException("Symbol incorrect", "SymbolTextBox");
             }
             // Starting Hour validation
-            if (!DateTime.TryParseExact(StartingHourString, "hh:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startingHour))
+            if (!DateTime.TryParseExact(StartingHourString, WorkingOptionModel.StartingHourFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startingHour))
             {
                 throw new ArgumentException("Incorrect format of starting hour", "StartingHourTextBox");
             }
             // Working Time validation
-            if (!TimeSpan.TryParseExact(WorkingTimeString, @"hh\:mm", CultureInfo.InvariantCulture, out TimeSpan workingTime))
+            if (!TimeSpan.TryParseExact(WorkingTimeString, WorkingOptionModel.WorkingTimeFormat, CultureInfo.InvariantCulture, out TimeSpan workingTime))
             {
                 throw new ArgumentException("Incorrect format of starting hour", "WorkingTimeTextBox");
             }

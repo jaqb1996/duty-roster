@@ -87,5 +87,10 @@ namespace WPFUI
 
         }
         private string GetPropertyName(int i) => numberPropertyNameCommonPart + i;
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

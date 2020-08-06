@@ -26,6 +26,6 @@
             
         </DataGrid>
         <Button x:Name="OKButton" Grid.Column="1" Grid.Row="3" 
-                Content="OK" Width="100" Margin="10"/>
+                Content="OK" Width="100" Margin="10" Click="OKButton_Click"/>
     </Grid>
 </Window>

@@ -37,8 +37,8 @@ namespace WPFUI
             if (symbol != "")
             {
                 SymbolTextBox.Text = symbol;
-                StartingHourTextBox.Text = plan.StartingHour.ToString("hh:mm");
-                WorkingTimeTextBox.Text = plan.WorkingTime.ToString(@"hh\:mm");
+                StartingHourTextBox.Text = plan.StartingHour.ToString(WorkingOptionModel.StartingHourFormat);
+                WorkingTimeTextBox.Text = plan.WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat);
             }
 
             this.date = date;
@@ -67,10 +67,10 @@ namespace WPFUI
             }
             AppResources.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
-            sendInformationAboutModification();
+            SendInformationAboutModification();
             Close();
         }
-        private void sendInformationAboutModification()
+        private void SendInformationAboutModification()
         {
             ((MainWindow)Application.Current.MainWindow).Modified = true;
             ((MainWindow)Application.Current.MainWindow).Title = "Grafik (zmodyfikowany)";
@@ -81,13 +81,15 @@ namespace WPFUI
                 return;
             // Fill starting hour and working time if employee has default working option with chosen symbol 
             IEmployee employee = (from emp in AppResources.Schedule.Employees where emp.Id == employeeId select emp).Single();
+
             foreach (IWorkingOption option in employee.AvailableOptions)
             {
                 if (option.Symbol == SymbolTextBox.Text)
-                {
-                    StartingHourTextBox.Text = option.StartingHour.ToString("hh:mm");
-                    WorkingTimeTextBox.Text = option.WorkingTime.ToString(@"hh\:mm");
+                { 
+                    StartingHourTextBox.Text = option.StartingHour.ToString(WorkingOptionModel.StartingHourFormat);
+                    WorkingTimeTextBox.Text = option.WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat);
                 }
+                
             }
         }
     }

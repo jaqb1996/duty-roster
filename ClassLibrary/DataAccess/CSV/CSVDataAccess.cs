@@ -21,7 +21,6 @@ namespace ClassLibrary.DataAccess.CSV
         readonly string WorkingOptionsOfEmployeeFile = DataPath + "\\WorkingOptionsOfEmployee.csv";
 
         readonly string dateFormat = "yyyy-MM-dd";
-        readonly string timeFormat = @"hh\:mm";
         readonly string defaultTime = "00:00";
         public CSVDataAccess()
         {
@@ -39,14 +38,21 @@ namespace ClassLibrary.DataAccess.CSV
 
         public void AddEmployeeToSchedule(int scheduleID, int employeeID)
         {
-            ISchedulePresentationData schedule = GetScheduleFromId(scheduleID);
+            //ISchedulePresentationData schedule = GetScheduleFromId(scheduleID);
+            ISchedule schedule = LoadSchedule(scheduleID);
+
+            // Check if schedule already contains such employee
+            if (schedule.Employees.Select(e => e.Id).Contains(employeeID))
+                throw new InvalidOperationException("Employee already exists in the schedule");
+
+            // Save default plan for employee
             int numberOfDays = schedule.GetNumberOfDays();
             fileHelper.WriteToFile(WorkingPlanFile, (writer) =>
             {
                 writer.Write($"{scheduleID},{employeeID}");
                 for (int i = 0; i < numberOfDays; i++)
                 {
-                    writer.Write($",{""},{DateTime.Parse(defaultTime).ToString(timeFormat)},{TimeSpan.Parse(defaultTime).ToString(timeFormat)}");
+                    writer.Write($",{""},{DateTime.Parse(defaultTime).ToString(WorkingOptionModel.StartingHourFormat)},{TimeSpan.Parse(defaultTime).ToString(WorkingOptionModel.WorkingTimeFormat)}");
                 }
             });
         }
@@ -56,7 +62,7 @@ namespace ClassLibrary.DataAccess.CSV
             int id = GetNextID(AllWorkingOptionsFile);
             fileHelper.WriteToFile(AllWorkingOptionsFile, (writer) =>
              {
-                 writer.Write($"{id},{symbol},{startingHour.ToString(timeFormat)},{workingTime.ToString(timeFormat)}");
+                 writer.Write($"{id},{symbol},{startingHour.ToString(WorkingOptionModel.StartingHourFormat)},{workingTime.ToString(WorkingOptionModel.WorkingTimeFormat)}");
              });
             return id;
         }
@@ -108,9 +114,11 @@ namespace ClassLibrary.DataAccess.CSV
 
         public ISchedule LoadSchedule(int id)
         {
+            // Get basic information about schedule
             ISchedulePresentationData schedule = GetScheduleFromId(id);
             ISchedule output = new ScheduleModel(schedule.Id, schedule.Name, schedule.StartingDay, schedule.LastDay);
 
+            // Get list of employees (without available working options for now)
             List<WorkingPlan> plans = GetWorkingPlans();
             List<IEmployeePresentationData> employeeData = GetEmployees();
             List<IEmployee> employeesWithoutWorkingPlan = (from p in plans
@@ -119,6 +127,7 @@ namespace ClassLibrary.DataAccess.CSV
                                                            on p.EmployeeID equals e.Id
                                                            select output.CreateEmployee(e.Id, e.FirstName, e.LastName)).ToList();
 
+            // Fill in the list of employees with available options
             List<IEmployee> employees = new List<IEmployee>();
             List<WorkingOptionOfEmployee> workingOptionOfEmployees = GetWorkingOptionOfEmployees();
             List<WorkingOption> workingOptions = GetWorkingOptions();
@@ -127,19 +136,22 @@ namespace ClassLibrary.DataAccess.CSV
                 List<IWorkingOption> options = (from i in workingOptionOfEmployees
                                                 where i.EmployeeID == employee.Id
                                                 join o in workingOptions
-                                                on i.EmployeeID equals o.Id
+                                                on i.WorkingOptionID equals o.Id
                                                 select new WorkingOptionModel(o.Symbol, o.WorkingTime, o.StartingHour) as IWorkingOption).ToList();
                 employees.Add(output.CreateEmployee(employee.Id, employee.FirstName, employee.LastName, options));
             }
 
-
+            // Add each employee to output schedule
             employees.ForEach(e => output.AddEmployee(e));
 
+            // Get working plan for each employee
             foreach (IEmployee employee in employees)
             {
                 List<IWorkingOption> workingPlan = (from p in plans
                                                     where p.EmployeeID == employee.Id && p.ScheduleID == output.Id
                                                     select p.WorkingOptions).Single();
+
+                // Fill in output schedule with plans for each day
                 int i = 0;
                 output.IterateOverAllDays((day) =>
                 {

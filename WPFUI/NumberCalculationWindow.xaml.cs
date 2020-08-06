@@ -21,7 +21,7 @@ namespace WPFUI
     /// </summary>
     public partial class NumberCalculationWindow : Window
     {
-        List<EmployeeDisplayData> rows = new List<EmployeeDisplayData>();
+        readonly List<EmployeeDisplayData> rows = new List<EmployeeDisplayData>();
         public NumberCalculationWindow(ICalculatorReturningNumberForEmployee calculator)
         {
             InitializeComponent();

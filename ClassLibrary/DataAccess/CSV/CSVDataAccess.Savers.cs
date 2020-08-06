@@ -20,7 +20,7 @@ namespace ClassLibrary.DataAccess.CSV
                     writer.Write($"{plan.ScheduleID},{plan.EmployeeID}");
                     foreach (IWorkingOption option in plan.WorkingOptions)
                     {
-                        writer.Write($",{option.Symbol},{option.StartingHour.ToString(timeFormat)},{option.WorkingTime.ToString(timeFormat)}");
+                        writer.Write($",{option.Symbol},{option.StartingHour.ToString(WorkingOptionModel.StartingHourFormat)},{option.WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat)}");
                     }
                 });
             }

@@ -3,6 +3,7 @@ using ClassLibrary.Helpers;
 using ClassLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,8 +44,8 @@ namespace ClassLibrary.DataAccess.CSV
             {
                 int id = int.Parse(lineData[0]);
                 string symbol = lineData[1];
-                DateTime startingHour = DateTime.Parse(lineData[2]);
-                TimeSpan workingHours = TimeSpan.Parse(lineData[3]);
+                DateTime startingHour = DateTime.ParseExact(lineData[2], WorkingOptionModel.StartingHourFormat, CultureInfo.InvariantCulture);
+                TimeSpan workingHours = TimeSpan.ParseExact(lineData[3], WorkingOptionModel.WorkingTimeFormat, CultureInfo.InvariantCulture);
                 output.Add(new WorkingOption { Id = id, Symbol = symbol, StartingHour = startingHour, WorkingTime = workingHours });
             });
             return output;
