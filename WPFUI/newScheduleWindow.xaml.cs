@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ClassLibrary.DataAccess.CSV;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,18 +34,32 @@ namespace WPFUI
         private void CreateScheduleButton_Click(object sender, RoutedEventArgs e)
         {
             string name = NewScheduleName.Text;
-
-            if (FirstDayPicker.SelectedDate == null || LastDayPicker.SelectedDate == null || name == "")
+            if (FirstDayPicker.SelectedDate == null || LastDayPicker.SelectedDate == null || !Regex.IsMatch(name, CSVDataAccess.NamePattern))
             {
-                MessageBox.Show("Wybierz nazwę oraz pierwszy i ostatni dzień grafiku", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Wybierz nazwę we właściwym formacie oraz pierwszy i ostatni dzień grafiku", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
             DateTime startingDay = (DateTime)FirstDayPicker.SelectedDate;
             DateTime lastDay = (DateTime)LastDayPicker.SelectedDate;
-
-            int id = AppResources.DataAccess.CreateSchedule(name, startingDay, lastDay);
-            AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
+            int id;
+            try
+            {
+                id = AppResources.DataAccess.CreateSchedule(name, startingDay, lastDay);
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("Pierwszy dzień grafiku musi być przed ostatnim dniem", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            try
+            {
+                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+            }
 
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             Close();

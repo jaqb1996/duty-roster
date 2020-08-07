@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
+using ClassLibrary.DataAccess.CSV;
 
 namespace WPFUI
 {
@@ -32,7 +34,14 @@ namespace WPFUI
         private void Window_Activated(object sender, EventArgs e)
         {
             // Refresh available options on Window_Activated event to reflect changes done by other windows
-            availableOptions = AppResources.DataAccess.ReadAvailableWorkingOptions();
+            try
+            {
+                availableOptions = AppResources.DataAccess.ReadAvailableWorkingOptions();
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+            }
             AvailableOptionsComboBox.ItemsSource = availableOptions;
         }
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
@@ -51,20 +60,36 @@ namespace WPFUI
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            // Validate first and last name
             string firstName = EmployeeFirstName.Text;
             string lastName = EmployeeLastName.Text;
-            if (firstName == "" || lastName == "")
+            int employeeID;
+            try
             {
-                MessageBox.Show("Podaj imię oraz nazwisko pracownika", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Add employee to database
+                employeeID = AppResources.DataAccess.AddEmployee(firstName, lastName);
+            }
+            catch (ArgumentException)
+            {
+                // Validation Unsuccessful
+                MessageBox.Show("Podaj imię oraz nazwisko pracownika w odpowiednim formacie", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            // Add employee to database
-            int employeeID = AppResources.DataAccess.AddEmployee(firstName, lastName);
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+            }
             // Connect chosen working options with employee 
             foreach (var option in addedOptions)
             {
-                AppResources.DataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
+                try
+                {
+                    AppResources.DataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
+                }
+                catch (Exception)
+                {
+                    Helpers.ShowGeneralError();
+                }
             }
 
             Close();

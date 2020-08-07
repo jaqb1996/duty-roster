@@ -5,13 +5,17 @@ using ClassLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text.RegularExpressions;
 
 namespace ClassLibrary.DataAccess.CSV
 {
     public partial class CSVDataAccess : IDataAccess
     {
         readonly FileHelper fileHelper;
+
+        // Do not let user enter dangerous characters for csv files
+        public const string NamePattern = @"^\p{L}[^,\n=\-+@]*$"; // Names must begin with letter  
+        public const string SymbolPattern = @"^[^,\n=\-+@]*$"; // Symbol can be empty
 
         const string DataPath = "Data\\CSV";
         readonly string SchedulesFile = DataPath + "\\Schedules.csv";
@@ -28,6 +32,7 @@ namespace ClassLibrary.DataAccess.CSV
         }
         public int AddEmployee(string firstName, string lastName)
         {
+            CheckInputStrings(NamePattern, firstName, lastName);
             int id = GetNextID(EmployeesFile);
             fileHelper.WriteToFile(EmployeesFile, (writer) =>
             {
@@ -52,13 +57,14 @@ namespace ClassLibrary.DataAccess.CSV
                 writer.Write($"{scheduleID},{employeeID}");
                 for (int i = 0; i < numberOfDays; i++)
                 {
-                    writer.Write($",{""},{DateTime.Parse(defaultTime).ToString(WorkingOptionModel.StartingHourFormat)},{TimeSpan.Parse(defaultTime).ToString(WorkingOptionModel.WorkingTimeFormat)}");
+                    writer.Write($",{WorkingOptionModel.DefaultSymbol},{DateTime.Parse(defaultTime).ToString(WorkingOptionModel.StartingHourFormat)},{TimeSpan.Parse(defaultTime).ToString(WorkingOptionModel.WorkingTimeFormat)}");
                 }
             });
         }
 
         public int AddWorkingOption(string symbol, DateTime startingHour, TimeSpan workingTime)
         {
+            CheckInputStrings(SymbolPattern, symbol);
             int id = GetNextID(AllWorkingOptionsFile);
             fileHelper.WriteToFile(AllWorkingOptionsFile, (writer) =>
              {
@@ -77,7 +83,7 @@ namespace ClassLibrary.DataAccess.CSV
 
         public void AddWorkingOptionForDay(int scheduleID, int employeeID, DateTime date, IWorkingOption workingOption)
         {
-
+            CheckInputStrings(SymbolPattern, workingOption.Symbol);
             ISchedulePresentationData schedule = GetScheduleFromId(scheduleID);
             int indexOfDate = schedule.GetIndexOfDate(date);
 
@@ -104,6 +110,9 @@ namespace ClassLibrary.DataAccess.CSV
 
         public int CreateSchedule(string name, DateTime startingDay, DateTime lastDay)
         {
+            CheckInputStrings(NamePattern, name);
+            if (!(startingDay < lastDay))
+                throw new ArgumentException("Starting day must be earlier then last day");
             int id = GetNextID(SchedulesFile);
             fileHelper.WriteToFile(SchedulesFile, (writer) =>
             {
@@ -208,6 +217,8 @@ namespace ClassLibrary.DataAccess.CSV
             }
             foreach (IEmployee emp in schedule.Employees)
             {
+                // Validate symbol for each plan
+                emp.WorkingPlan.ForEach(o => CheckInputStrings(SymbolPattern, o.Symbol));
                 newPlans.Add(new WorkingPlan()
                 {
                     ScheduleID = schedule.Id,

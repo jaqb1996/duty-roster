@@ -5,8 +5,9 @@ namespace ClassLibrary.Models
 {
     public class WorkingOptionModel : IWorkingOption
     {
-        public static string StartingHourFormat = "HH:mm"; // HH - 24h format
-        public static string WorkingTimeFormat = @"hh\:mm";
+        public static readonly string StartingHourFormat = "HH:mm"; // HH - 24h format
+        public static readonly string WorkingTimeFormat = @"hh\:mm";
+        public static readonly string DefaultSymbol = "";
         public int Id { get; set; }
         public string Symbol { get; set; }
         public TimeSpan WorkingTime { get; set; }
@@ -16,7 +17,7 @@ namespace ClassLibrary.Models
 
         public WorkingOptionModel()
         {
-            Symbol = "";
+            Symbol = DefaultSymbol;
             WorkingTime = new TimeSpan();
             StartingHour = new DateTime();
         }

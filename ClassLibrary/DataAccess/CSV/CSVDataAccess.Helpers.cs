@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ClassLibrary.DataAccess.CSV
@@ -102,7 +103,14 @@ namespace ClassLibrary.DataAccess.CSV
                     where id == s.Id
                     select s).Single();
         }
-
-        
+        private void CheckInputStrings(string pattern, params string[] inputStrings)
+        {
+            foreach (string text in inputStrings)
+            {
+                if (!Regex.IsMatch(text, pattern))
+                    throw new ArgumentException("Bad format of data");
+            }
+                
+        } 
     }
 }

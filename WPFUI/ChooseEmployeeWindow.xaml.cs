@@ -32,7 +32,16 @@ namespace WPFUI
         }
         public void RefreshListOfEmployees()
         {
-            List<IEmployeePresentationData> employees = AppResources.DataAccess.ReadNamesOfAvailableEmployees();
+            List<IEmployeePresentationData> employees;
+            try
+            {
+                employees = AppResources.DataAccess.ReadNamesOfAvailableEmployees();
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+            }
             availableEmployeesListbox.ItemsSource = employees;
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -47,10 +56,10 @@ namespace WPFUI
                 MessageBox.Show("Wybierz najpierw pracownika", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            int scheduleID = AppResources.Schedule.Id;
             foreach (var emp in availableEmployeesListbox.SelectedItems)
             {
-                int employeeID = ((IEmployeePresentationData)emp).Id;
-                int scheduleID = AppResources.Schedule.Id;
+                int employeeID = ((IEmployeePresentationData)emp).Id; 
                 try
                 {
                     AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
@@ -62,13 +71,21 @@ namespace WPFUI
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Niestety operacja nie powiodła się", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Helpers.ShowGeneralError();
                     return;
                 }
-                
-                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
-                ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             }
+            try
+            {
+                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+
+            }
+                ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             Close();
         }
 

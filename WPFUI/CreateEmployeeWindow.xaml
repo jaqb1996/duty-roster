@@ -68,9 +68,7 @@
                       Margin="5">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding GetSummary}"/>
-                            </StackPanel>
+                            <TextBlock Text="{Binding GetSummary}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>

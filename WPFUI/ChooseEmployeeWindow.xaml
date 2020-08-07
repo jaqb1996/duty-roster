@@ -40,7 +40,7 @@
                     <Setter Property="Padding" Value="5"/>
                 </Style>
             </ItemsControl.Resources>
-            <Button x:Name="AddSelectedButton" Content="Dodaj zaznaczonego pracownika" 
+            <Button x:Name="AddSelectedButton" Content="Dodaj zaznaczonych pracowników" 
                     Click="AddSelectedButton_Click"/>
             <Button x:Name="NewEmployeeButton" Content="Nowy pracownik" Click="NewEmployeeButton_Click"/>
             <Button x:Name="CancelButton" Content="Anuluj" Click="CancelButton_Click"/>

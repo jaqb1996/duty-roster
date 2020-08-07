@@ -5,6 +5,7 @@ using Microsoft.SqlServer.Server;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -24,13 +25,13 @@ namespace WPFUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public MainWindow()
         {
             InitializeComponent();
 
-            saveChangesButton.DataContext = this;
+            DataContext = this;
         }
         // Let user choose schedule as soon as window loads 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -39,7 +40,21 @@ namespace WPFUI
             window.ShowDialog();
         }
 
-        public bool Modified { get; set; } = false;
+        // Notify SaveChangesButton that Modified property (bound to the button's IsEnabled) has changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        private bool modified = false;
+        public bool Modified 
+        {
+            get => modified;
+            set
+            {
+                if (value != modified)
+                {
+                    modified = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Modified"));
+                }
+            } 
+        }
 
         private readonly string dateHeaderFormat = "%d.%M.%y";
         private readonly string datePropertyFormat = "%d_%M_%y";
@@ -100,6 +115,7 @@ namespace WPFUI
         // ExpandoObject is used because of possibility of variable number of days in different schedules
         private List<ExpandoObject> rows;
 
+
         private void PopulateRows()
         {
             rows = new List<ExpandoObject>();
@@ -114,18 +130,22 @@ namespace WPFUI
                 // Generate as many fiels as schedule has days
                 AppResources.Schedule.IterateOverAllDays((day) =>
                 {
-                    ((IDictionary<string, object>)row).Add(GetDatePropertyName(day), employee.WorkingPlan[i].Symbol);
+                    // Leave empty space for default value
+                    ((IDictionary<string, object>)row).Add(GetDatePropertyName(day), employee.WorkingPlan[i].Symbol == "W" ? "" : employee.WorkingPlan[i].Symbol);
                     i++;
                 });
                 rows.Add(row);
             }
         }
 
-
         private void chooseScheduleButton_Click(object sender, RoutedEventArgs e)
         {
-            ChooseScheduleWindow window = new ChooseScheduleWindow();
-            window.ShowDialog();
+            SaveChangesDialog(() =>
+            {
+                ChooseScheduleWindow window = new ChooseScheduleWindow();
+                window.ShowDialog();
+            }, () => { }); // Don't do anything on user's Cancel
+            
         }
         
         private string GetDatePropertyName(DateTime day)
@@ -163,7 +183,14 @@ namespace WPFUI
         {
             if (Modified)
             {
-                AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                try
+                {
+                    AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                }
+                catch (Exception)
+                {
+                    Helpers.ShowGeneralError();
+                }
                 Modified = false;
                 Title = "Grafik";
             }
@@ -180,31 +207,46 @@ namespace WPFUI
             window.ShowDialog();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
-            // Ask user if he wants to save changes and take appropriate actions
+            SaveChangesDialog(Application.Current.Shutdown, () => { e.Cancel = true; });
+        }
+        /// <summary>
+        /// Asks user if he wants to save changes if schedule has been modified and then takes appropriate actions
+        /// </summary>
+        /// <param name="mainAction">What to do after user's No, after saving and if not modified</param>
+        /// <param name="actionForCancel">What to do after user's Cancel</param>
+        private void SaveChangesDialog(Action mainAction, Action actionForCancel)
+        {
             if (Modified)
             {
                 MessageBoxResult answer = MessageBox.Show("Czy chcesz zapisać zmiany?", "Wyjście", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 switch (answer)
                 {
                     case MessageBoxResult.Cancel:
-                        e.Cancel = true;
+                        actionForCancel.Invoke();
                         break;
                     case MessageBoxResult.Yes:
-                        AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
-                        Application.Current.Shutdown();
+                        try
+                        {
+                            AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                        }
+                        catch (Exception)
+                        {
+                            Helpers.ShowGeneralError();
+                        }
+                        mainAction.Invoke();
                         break;
                     case MessageBoxResult.No:
-                        Application.Current.Shutdown();
+                        mainAction.Invoke();
                         break;
                 }
             }
             else
             {
-                Application.Current.Shutdown();
+                mainAction.Invoke();
             }
-            
         }
+            
     }
 }

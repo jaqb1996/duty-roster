@@ -34,7 +34,7 @@ namespace WPFUI
             // Fill fields with current values if already modified
             IWorkingOption plan = AppResources.Schedule.PlanForDay(employeeId, date);
             string symbol = plan.Symbol;
-            if (symbol != "")
+            if (symbol != WorkingOptionModel.DefaultSymbol)
             {
                 SymbolTextBox.Text = symbol;
                 StartingHourTextBox.Text = plan.StartingHour.ToString(WorkingOptionModel.StartingHourFormat);
@@ -73,7 +73,7 @@ namespace WPFUI
         private void SendInformationAboutModification()
         {
             ((MainWindow)Application.Current.MainWindow).Modified = true;
-            ((MainWindow)Application.Current.MainWindow).Title = "Grafik (zmodyfikowany)";
+            ((MainWindow)Application.Current.MainWindow).Title = "Grafik *";
         }
         private void SymbolTextBox_LostFocus(object sender, RoutedEventArgs e)
         {

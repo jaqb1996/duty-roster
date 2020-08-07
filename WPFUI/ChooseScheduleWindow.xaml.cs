@@ -25,8 +25,17 @@ namespace WPFUI
         public ChooseScheduleWindow()
         {   
             InitializeComponent();
-
-            List<ISchedulePresentationData> schedules = AppResources.DataAccess.ReadNamesOfAvailableSchedules();
+            List<ISchedulePresentationData> schedules;
+            try
+            {
+                schedules = AppResources.DataAccess.ReadNamesOfAvailableSchedules();
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                Close();
+                return;
+            }
             availableSchedulesListbox.ItemsSource = schedules;
 
         }
@@ -35,11 +44,19 @@ namespace WPFUI
         {
             if (availableSchedulesListbox.SelectedItem == null)
             {
-                // TODO message box: you must choose schedule
+                MessageBox.Show("Wybierz grafik do załadowania.", "Brak wyboru grafika", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             int id = ((ISchedulePresentationData)availableSchedulesListbox.SelectedItem).Id;
-            AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
+            try
+            {
+                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+            }
             ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
 
             Close();

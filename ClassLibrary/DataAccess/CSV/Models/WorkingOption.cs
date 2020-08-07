@@ -10,6 +10,6 @@ namespace ClassLibrary.DataAccess.CSV.Models
         public DateTime StartingHour { get; set; }
         public TimeSpan WorkingTime { get; set; }
 
-        public string GetSummary => $"{Symbol}, {StartingHour.ToString("hh:mm")}, {WorkingTime.ToString(@"hh\:mm")}";
+        public string GetSummary => $"{Symbol}, {StartingHour.ToString(WorkingOptionModel.StartingHourFormat)}, {WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat)}";
     }
 }

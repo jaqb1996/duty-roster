@@ -24,7 +24,7 @@ namespace ClassLibrary.Models
             Id = id;
             Name = name;
             if (!(startingDay < lastDay))
-                throw new Exception("Starting day must be earlier than last day");
+                throw new ArgumentException("Starting day must be earlier than last day");
             StartingDay = startingDay;
             LastDay = lastDay;
             Employees = new List<IEmployee>();
