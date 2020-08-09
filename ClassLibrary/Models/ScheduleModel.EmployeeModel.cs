@@ -65,10 +65,10 @@ namespace ClassLibrary.Models
                 return hashCode;
             }
 
-            public bool Equals(int other)
-            {
-                return other == this.Id;
-            }
+            //public bool Equals(int other)
+            //{
+            //    return other == this.Id;
+            //}
         }
     }
 }

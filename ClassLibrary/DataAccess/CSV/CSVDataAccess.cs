@@ -116,7 +116,7 @@ namespace ClassLibrary.DataAccess.CSV
             int id = GetNextID(SchedulesFile);
             fileHelper.WriteToFile(SchedulesFile, (writer) =>
             {
-                writer.Write($"{id},{name},{startingDay.ToString(dateFormat)},{lastDay.ToString(dateFormat)}");
+                writer.Write(GetScheduleDataSeparated(id, name, startingDay, lastDay));
             });
             return id;
         }
@@ -228,5 +228,33 @@ namespace ClassLibrary.DataAccess.CSV
             }
             SaveWorkingPlans(newPlans);
         }
+
+        public void DeleteSchedule(int scheduleID)
+        {
+            // Delete from WorkingPlanFile
+            List<WorkingPlan> oldPlan = GetWorkingPlans();
+            List<WorkingPlan> newPlan = new List<WorkingPlan>();
+            oldPlan.Where(x => x.ScheduleID != scheduleID).ToList().ForEach(x => newPlan.Add(x));
+            SaveWorkingPlans(newPlan);
+
+            // Delete from SchedulesFile
+            List<ISchedulePresentationData> oldSchedules = GetSchedules();
+            List<Schedule> newSchedules = new List<Schedule>();
+            oldSchedules.Where(s => s.Id != scheduleID).ToList().ForEach(s => newSchedules.Add(s as Schedule));
+            SaveSchedulesToFile(newSchedules);
+
+        }
+        public void DeleteEmployeeFromSchedule(int employeeID, int scheduleID)
+        {
+            List<WorkingPlan> oldPlan = GetWorkingPlans();
+            List<WorkingPlan> newPlan = new List<WorkingPlan>();
+            oldPlan.Where(x => !(x.EmployeeID == employeeID && x.ScheduleID == scheduleID)).ToList().ForEach(x => newPlan.Add(x));
+            SaveWorkingPlans(newPlan);
+        }
+        public void DeleteEmployee(int employeeID)
+        {
+            throw new NotImplementedException();
+        }
+        
     }
 }

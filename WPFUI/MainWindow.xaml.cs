@@ -186,27 +186,37 @@ namespace WPFUI
                 try
                 {
                     AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                    SetNoLongerModified();
                 }
                 catch (Exception)
                 {
                     Helpers.ShowGeneralError();
                 }
-                Modified = false;
-                Title = "Grafik";
             }
+        }
+
+        private void SetNoLongerModified()
+        {
+            Modified = false;
+            Title = "Grafik";
         }
 
         private void calculationsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AppResources.Schedule == null)
-            {
-                MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (!CheckScheduleExistence())
                 return;
-            }
             ChooseCalculatorWindow window = new ChooseCalculatorWindow();
             window.ShowDialog();
         }
-
+        private bool CheckScheduleExistence()
+        {
+            if (AppResources.Schedule == null)
+            {
+                MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             SaveChangesDialog(Application.Current.Shutdown, () => { e.Cancel = true; });
@@ -220,7 +230,7 @@ namespace WPFUI
         {
             if (Modified)
             {
-                MessageBoxResult answer = MessageBox.Show("Czy chcesz zapisać zmiany?", "Wyjście", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                MessageBoxResult answer = MessageBox.Show("Czy chcesz zapisać zmiany?", "Zapisać zmiany?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                 switch (answer)
                 {
                     case MessageBoxResult.Cancel:
@@ -230,6 +240,7 @@ namespace WPFUI
                         try
                         {
                             AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                            SetNoLongerModified();
                         }
                         catch (Exception)
                         {
@@ -247,6 +258,70 @@ namespace WPFUI
                 mainAction.Invoke();
             }
         }
-            
+
+        private void DeleteSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckScheduleExistence())
+                return;
+            if (MessageBox.Show("Czy na pewno chcesz trwale usunąć grafik?", "Potwierdzenie usunięcia", MessageBoxButton.YesNo, MessageBoxImage.Warning) !=
+                MessageBoxResult.Yes)
+                return;
+            try
+            {
+                AppResources.DataAccess.DeleteSchedule(AppResources.Schedule.Id);
+                AppResources.Schedule = null;
+                // Clear columns to protect from using nonexistent schedule
+                mainGrid.Columns.Clear();
+                scheduleTitle.Text = "Nie wczytano grafiku";
+            }
+            catch (Exception ex)
+            {
+                Helpers.ShowGeneralError(ex);
+                return;
+            }
+            ChooseScheduleWindow window = new ChooseScheduleWindow();
+            window.ShowDialog();
+        }
+
+        private void DeleteEmployeeButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveChangesDialog(DeleteEmployeeFromSchedule, 
+                () => { }); // Don't do anything on user's Cancel
+        }
+
+        private void DeleteEmployeeFromSchedule()
+        {
+            if (!CheckScheduleExistence())
+                return;
+            int index = mainGrid.SelectedIndex;
+            if (index == -1)
+            {
+                MessageBox.Show("Musisz najpierw zaznaczyć wiersz odpowiadający pracownikowi", "Brak wyboru pracownika", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            // Get ExpandoObject bound to selected row
+            var employee = (IDictionary<string, object>)rows[index];
+            var employeeID = (int)employee[idPropertyName];
+            var firstName = (string)employee[Helpers.firstNamePropertyName];
+            var lastName = (string)employee[Helpers.lastNamePropertyName];
+
+            // Make sure user wants to delete employee
+            if (MessageBox.Show($"Czy na pewno chcesz usunąć pracownika {firstName} {lastName} z grafiku?", "Potwierdź usunięcie pracownika",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+                return;
+
+            // Delete employee
+            try
+            {
+                int scheduleID = AppResources.Schedule.Id;
+                AppResources.DataAccess.DeleteEmployeeFromSchedule(employeeID, scheduleID);
+                Helpers.LoadAndRefreshSchedule(scheduleID);
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+            }
+        }
     }
 }

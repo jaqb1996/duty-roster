@@ -37,12 +37,21 @@ namespace WPFUI
             if (symbol != WorkingOptionModel.DefaultSymbol)
             {
                 SymbolTextBox.Text = symbol;
-                StartingHourTextBox.Text = plan.StartingHour.ToString(WorkingOptionModel.StartingHourFormat);
-                WorkingTimeTextBox.Text = plan.WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat);
+                FillTimeFields(plan);
             }
 
             this.date = date;
             this.employeeId = employeeId;
+        }
+
+        private void FillTimeFields(IWorkingOption plan)
+        {
+            // Format numbers with leading zero
+            StartingHourTextBox.Text = plan.StartingHour.ToString("HH");
+            StartingMinuteTextBox.Text = plan.StartingHour.ToString("mm");
+
+            WorkingTimeHourTextBox.Text = plan.WorkingTime.ToString("hh");
+            WorkingTimeMinuteTextBox.Text = plan.WorkingTime.ToString("mm");
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -52,24 +61,32 @@ namespace WPFUI
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            string symbol;
-            DateTime startingHour;
-            TimeSpan workingTime;
+            ModifySchedule();
+        }
+
+        private void ModifySchedule()
+        {
+            string symbol = SymbolTextBox.Text;
             try
             {
-                (symbol, startingHour, workingTime) = Helpers.WorkingOptionData(SymbolTextBox.Text, StartingHourTextBox.Text, WorkingTimeTextBox.Text);
-
+                DateTime startingHour = new DateTime(1, 1, 1, int.Parse(StartingHourTextBox.Text), int.Parse(StartingMinuteTextBox.Text), 0);
+                TimeSpan workingTime = new TimeSpan(int.Parse(WorkingTimeHourTextBox.Text), int.Parse(WorkingTimeMinuteTextBox.Text), 0);
+                AppResources.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
             }
-            catch (ArgumentException ex)
+            catch (FormatException)
             {
-                Helpers.DisplayWorkingOptionError(ex);
+                Helpers.ShowFormatError();
                 return;
             }
-            AppResources.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
-            ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+            }
+                    ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
             SendInformationAboutModification();
             Close();
         }
+
         private void SendInformationAboutModification()
         {
             ((MainWindow)Application.Current.MainWindow).Modified = true;
@@ -85,12 +102,17 @@ namespace WPFUI
             foreach (IWorkingOption option in employee.AvailableOptions)
             {
                 if (option.Symbol == SymbolTextBox.Text)
-                { 
-                    StartingHourTextBox.Text = option.StartingHour.ToString(WorkingOptionModel.StartingHourFormat);
-                    WorkingTimeTextBox.Text = option.WorkingTime.ToString(WorkingOptionModel.WorkingTimeFormat);
+                {
+                    FillTimeFields(option);
                 }
                 
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                ModifySchedule();
         }
     }
 }

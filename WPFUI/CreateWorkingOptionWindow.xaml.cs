@@ -31,21 +31,17 @@ namespace WPFUI
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            string symbol;
-            DateTime startingHour;
-            TimeSpan workingTime;
+            string symbol = SymbolTextBox.Text;
             try
             {
-                (symbol, startingHour, workingTime) = Helpers.WorkingOptionData(SymbolTextBox.Text, StartingHourTextBox.Text, WorkingTimeTextBox.Text);
-            }
-            catch (ArgumentException ex)
-            {
-                Helpers.DisplayWorkingOptionError(ex);
-                return;
-            }
-            try
-            {
+                DateTime startingHour = new DateTime(1, 1, 1, int.Parse(StartingHourTextBox.Text), int.Parse(StartingMinuteTextBox.Text), 0);
+                TimeSpan workingTime = new TimeSpan(int.Parse(WorkingTimeHourTextBox.Text), int.Parse(WorkingTimeMinuteTextBox.Text), 0);
                 AppResources.DataAccess.AddWorkingOption(symbol, startingHour, workingTime);
+            }
+            catch (FormatException)
+            {
+                Helpers.ShowFormatError();
+                return;
             }
             catch (Exception)
             {

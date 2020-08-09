@@ -23,18 +23,22 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="scheduleTitle" Grid.Row="1"
-                   Text="Grafik:" HorizontalAlignment="Center"/>
+                   Text="Nie wczytano grafiku" HorizontalAlignment="Center"/>
         
         <DataGrid x:Name="mainGrid" Grid.Row="2" CanUserAddRows="False" CanUserDeleteRows="False"
                   CanUserReorderColumns="False" CanUserSortColumns="False"
                   MinHeight="250" BeginningEdit="mainGrid_BeginningEdit"/>
-        <Button x:Name="newEmployeeButton" Content="Dodaj pracownika"
-                Grid.Row="3" Click="newEmployeeButton_Click" 
+        <DockPanel Grid.Row="3">
+            <Button x:Name="newEmployeeButton" Content="Dodaj pracownika"
+                Click="newEmployeeButton_Click" 
                 HorizontalAlignment="Left"/>
-        <Button x:Name="saveChangesButton"  Content="Zapisz zmiany" 
-                Grid.Row="3" HorizontalAlignment="Right" 
+            <Button x:Name="DeleteEmployeeButton" Content="Usuń pracownika" Click="DeleteEmployeeButton_Click"/>
+            <Button x:Name="saveChangesButton"  Content="Zapisz zmiany" 
+                HorizontalAlignment="Right" 
                 Click="saveChangesButton_Click" 
                 IsEnabled="{Binding Modified}"/>
+        </DockPanel>
+        
 
          <ItemsControl Grid.Row="4">
             <ItemsControl.ItemsPanel>
@@ -47,6 +51,8 @@
             <Button x:Name="calculationsButton" Content="Obliczenia" Click="calculationsButton_Click" />
             <Button x:Name="chooseScheduleButton" Content="Wybierz inny grafik" 
                     Click="chooseScheduleButton_Click"/>
+            <Button x:Name="DeleteSchedule" Content="Usuń grafik" Click="DeleteSchedule_Click"/>
+             
         </ItemsControl>
 
     </Grid>

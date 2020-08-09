@@ -36,5 +36,16 @@ namespace ClassLibrary.DataAccess.CSV
                 });
             }
         }
+        private void SaveSchedulesToFile(List<Schedule> schedules)
+        {
+            fileHelper.DeleteContentOfFile(SchedulesFile);
+            foreach (Schedule schedule in schedules)
+            {
+                fileHelper.WriteToFile(SchedulesFile, (writer) =>
+                {
+                    writer.Write(GetScheduleDataSeparated(schedule.Id, schedule.Name, schedule.StartingDay, schedule.LastDay));
+                });
+            }
+        }
     }
 }

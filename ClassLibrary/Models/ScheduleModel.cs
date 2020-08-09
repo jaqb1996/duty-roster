@@ -1,4 +1,5 @@
-﻿using ClassLibrary.Helpers;
+﻿using ClassLibrary.DataAccess.CSV;
+using ClassLibrary.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,6 +52,7 @@ namespace ClassLibrary.Models
         }
         public void ChangeWorkDay( int employeeID, DateTime date, string symbol, DateTime startingHour, TimeSpan workingTime)
         {
+            CSVDataAccess.CheckInputStrings(CSVDataAccess.SymbolPattern, symbol);
             int employeeIndex = GetEmployeeIndex(employeeID);
             int index = this.GetIndexOfDate(date);
             Employees[employeeIndex].ChangeWorkDay(index, symbol, startingHour, workingTime);

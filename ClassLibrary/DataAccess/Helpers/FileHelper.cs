@@ -32,7 +32,7 @@ namespace ClassLibrary.DataAccess.Helpers
             this.separator = separator;
 
         }
-        readonly char separator;
+        public readonly char separator;
         //readonly string DataPath;
         //readonly string SchedulesFilePath;
         //readonly string WorkingPlanFilePath;

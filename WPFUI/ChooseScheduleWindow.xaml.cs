@@ -48,16 +48,8 @@ namespace WPFUI
                 return;
             }
             int id = ((ISchedulePresentationData)availableSchedulesListbox.SelectedItem).Id;
-            try
-            {
-                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
-            }
-            catch (Exception)
-            {
-                Helpers.ShowGeneralError();
-                return;
-            }
-            ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+
+            Helpers.LoadAndRefreshSchedule(id);
 
             Close();
         }

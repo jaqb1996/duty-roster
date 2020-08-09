@@ -74,5 +74,21 @@ namespace ClassLibrary.DataAccess
         /// </summary>
         /// <param name="schedule">Schedule to save</param>
         void SaveSchedule(ISchedule schedule);
+        /// <summary>
+        /// Deletes schedule from database
+        /// </summary>
+        /// <param name="scheduleID">ID of schedule to delete</param>
+        void DeleteSchedule(int scheduleID);
+        /// <summary>
+        /// Deletes employee from database
+        /// </summary>
+        /// <param name="employeeID">ID of employee to delete</param>
+        void DeleteEmployee(int employeeID);
+        /// <summary>
+        /// Deletes employee from schedule. Employee wil be still present in database  
+        /// </summary>
+        /// <param name="employeeID"></param>
+        /// <param name="scheduleID"></param>
+        void DeleteEmployeeFromSchedule(int employeeID, int scheduleID);
     }
 }

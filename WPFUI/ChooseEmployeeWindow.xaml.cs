@@ -57,27 +57,38 @@ namespace WPFUI
                 return;
             }
             int scheduleID = AppResources.Schedule.Id;
-            foreach (var emp in availableEmployeesListbox.SelectedItems)
+            bool atLeastOneAddded = false;
+            foreach (object emp in availableEmployeesListbox.SelectedItems)
             {
-                int employeeID = ((IEmployeePresentationData)emp).Id; 
+                int employeeID = ((IEmployeePresentationData)emp).Id;
                 try
                 {
                     AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
+                    atLeastOneAddded = true;
                 }
                 catch (InvalidOperationException)
                 {
-                    MessageBox.Show("Ten pracownik został już dodany", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    MessageBox.Show("Pracownik został już dodany", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    // Dont't return, load schedule and close window to show already added employees
+                    // Break the loop because collection of selected items changes with OK press 
+                    break;
+                    
                 }
                 catch (Exception)
                 {
-                    Helpers.ShowGeneralError();
-                    return;
+                    Helpers.ShowGeneralError(); 
                 }
             }
             try
             {
-                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
+                if (atLeastOneAddded)
+                {
+                    MessageBox.Show("Refreshing");
+                    AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
+                    ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+                    Close();
+                }
             }
             catch (Exception)
             {
@@ -85,8 +96,7 @@ namespace WPFUI
                 return;
 
             }
-                ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
-            Close();
+            
         }
 
         private void NewEmployeeButton_Click(object sender, RoutedEventArgs e)

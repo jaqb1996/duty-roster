@@ -103,14 +103,18 @@ namespace ClassLibrary.DataAccess.CSV
                     where id == s.Id
                     select s).Single();
         }
-        private void CheckInputStrings(string pattern, params string[] inputStrings)
+        public static void CheckInputStrings(string pattern, params string[] inputStrings)
         {
             foreach (string text in inputStrings)
             {
                 if (!Regex.IsMatch(text, pattern))
-                    throw new ArgumentException("Bad format of data");
+                    throw new FormatException("Bad format of data");
             }
                 
         } 
+        private string GetScheduleDataSeparated(int id, string name, DateTime startingDay, DateTime lastDay)
+        {
+            return $"{id}{fileHelper.separator}{name}{fileHelper.separator}{startingDay.ToString(dateFormat)}{fileHelper.separator}{lastDay.ToString(dateFormat)}";
+        }
     }
 }
