@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.XPath;
 
 namespace ClassLibrary.DataAccess.CSV
 {
@@ -45,6 +46,14 @@ namespace ClassLibrary.DataAccess.CSV
                 {
                     writer.Write(GetScheduleDataSeparated(schedule.Id, schedule.Name, schedule.StartingDay, schedule.LastDay));
                 });
+            }
+        }
+        private void SaveWorkingOptionsOfEmployee(List<WorkingOptionOfEmployee> workingOptions)
+        {
+            fileHelper.DeleteContentOfFile(WorkingOptionsOfEmployeeFile);
+            foreach (WorkingOptionOfEmployee pair in workingOptions)
+            {
+                AddWorkingOptionToEmployee(pair.EmployeeID, pair.WorkingOptionID);
             }
         }
     }

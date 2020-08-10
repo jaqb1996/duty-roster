@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="1"  Content="Lista dostępnych pracowników: " 
                HorizontalAlignment="Center"/>
-        <ListBox x:Name="availableEmployeesListbox" Grid.Row="2" Height="200"
+        <ListBox x:Name="availableEmployeesListbox" Grid.Row="2"
                  SelectionMode="Multiple">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -43,6 +43,8 @@
             <Button x:Name="AddSelectedButton" Content="Dodaj zaznaczonych pracowników" 
                     Click="AddSelectedButton_Click"/>
             <Button x:Name="NewEmployeeButton" Content="Nowy pracownik" Click="NewEmployeeButton_Click"/>
+            <Button x:Name="DeleteEmloyeesButton" 
+                    Content="Usuń pracownika" Click="DeleteEmloyeesButton_Click"/>
             <Button x:Name="CancelButton" Content="Anuluj" Click="CancelButton_Click"/>
         </ItemsControl>
     </Grid>

@@ -246,6 +246,7 @@ namespace ClassLibrary.DataAccess.CSV
         }
         public void DeleteEmployeeFromSchedule(int employeeID, int scheduleID)
         {
+            // Delete from WorkingPlanFile
             List<WorkingPlan> oldPlan = GetWorkingPlans();
             List<WorkingPlan> newPlan = new List<WorkingPlan>();
             oldPlan.Where(x => !(x.EmployeeID == employeeID && x.ScheduleID == scheduleID)).ToList().ForEach(x => newPlan.Add(x));
@@ -253,7 +254,23 @@ namespace ClassLibrary.DataAccess.CSV
         }
         public void DeleteEmployee(int employeeID)
         {
-            throw new NotImplementedException();
+            // Delete from WorkingPlanFile
+            List<WorkingPlan> oldPlans = GetWorkingPlans();
+            List<WorkingPlan> newPlans = new List<WorkingPlan>();
+            oldPlans.Where(x => x.EmployeeID != employeeID).ToList().ForEach(x => newPlans.Add(x));
+            SaveWorkingPlans(newPlans);
+
+            // Delete from WorkingOptionOfEmployeeFile
+            List<WorkingOptionOfEmployee> workingOptions = GetWorkingOptionOfEmployees();
+            List<WorkingOptionOfEmployee> newWorkingOptions = new List<WorkingOptionOfEmployee>();
+            workingOptions.Where(x => x.EmployeeID != employeeID).ToList().ForEach(x => newWorkingOptions.Add(x));
+            SaveWorkingOptionsOfEmployee(newWorkingOptions);
+
+            // Delete from EmployeesFile
+            List<IEmployeePresentationData> employees = GetEmployees();
+            List<Employee> newEmployees = new List<Employee>();
+            employees.Where(x => x.Id != employeeID).ToList().ForEach(x => newEmployees.Add(x as Employee));
+            SaveEmployees(newEmployees);
         }
         
     }

@@ -51,24 +51,21 @@ namespace WPFUI
 
         private void AddSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            if (availableEmployeesListbox.SelectedItem == null)
-            {
-                MessageBox.Show("Wybierz najpierw pracownika", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (!CheckEmployeeSelected())
                 return;
-            }
             int scheduleID = AppResources.Schedule.Id;
-            bool atLeastOneAddded = false;
+            bool atLeastOneAdded = false;
             foreach (object emp in availableEmployeesListbox.SelectedItems)
             {
-                int employeeID = ((IEmployeePresentationData)emp).Id;
+                var employee = ((IEmployeePresentationData)emp);
                 try
                 {
-                    AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employeeID);
-                    atLeastOneAddded = true;
+                    AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employee.Id);
+                    atLeastOneAdded = true;
                 }
                 catch (InvalidOperationException)
                 {
-                    MessageBox.Show("Pracownik został już dodany", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Pracownik {employee.FirstName} {employee.LastName} został już dodany", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
 
                     // Dont't return, load schedule and close window to show already added employees
                     // Break the loop because collection of selected items changes with OK press 
@@ -82,11 +79,11 @@ namespace WPFUI
             }
             try
             {
-                if (atLeastOneAddded)
+                if (atLeastOneAdded)
                 {
-                    MessageBox.Show("Refreshing");
-                    AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
-                    ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+                    Helpers.LoadAndRefreshSchedule(scheduleID);
+                    //AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
+                    //((MainWindow)Application.Current.MainWindow).RefreshSchedule();
                     Close();
                 }
             }
@@ -105,6 +102,40 @@ namespace WPFUI
             window.Show();
         }
 
-        
+        private void DeleteEmloyeesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckEmployeeSelected())
+                return;
+
+            // Delete only the first one of selected employees
+            IEmployeePresentationData emp = (IEmployeePresentationData)availableEmployeesListbox.SelectedItem;
+
+            // Make sure user really wants to delete
+            if (MessageBox.Show($"Czy na pewno chcesz usunąć pracownika {emp.FirstName} {emp.LastName} z bazy danych i wszystkich grafików?", "Potwierdź usunięcie", MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            // Delete employee
+            try
+            {
+                AppResources.DataAccess.DeleteEmployee(emp.Id);
+            }
+            catch (Exception)
+            {
+                Helpers.ShowGeneralError();
+                return;
+            }
+            RefreshListOfEmployees();
+            Helpers.LoadAndRefreshSchedule(AppResources.Schedule.Id);
+        }
+        private bool CheckEmployeeSelected()
+        {
+            if (availableEmployeesListbox.SelectedItem == null)
+            {
+                MessageBox.Show("Wybierz najpierw pracownika", "Brak wyboru", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
     }
 }

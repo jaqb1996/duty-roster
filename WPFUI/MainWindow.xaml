@@ -24,10 +24,16 @@
         </Grid.RowDefinitions>
         <TextBlock x:Name="scheduleTitle" Grid.Row="1"
                    Text="Nie wczytano grafiku" HorizontalAlignment="Center"/>
-        
+
         <DataGrid x:Name="mainGrid" Grid.Row="2" CanUserAddRows="False" CanUserDeleteRows="False"
                   CanUserReorderColumns="False" CanUserSortColumns="False"
-                  MinHeight="250" BeginningEdit="mainGrid_BeginningEdit"/>
+                  MinHeight="250" BeginningEdit="mainGrid_BeginningEdit">
+            <DataGrid.Resources>
+                <Style x:Key="HolidayColumnStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="Background" Value="PaleVioletRed"/>
+                </Style>
+            </DataGrid.Resources>
+        </DataGrid>
         <DockPanel Grid.Row="3">
             <Button x:Name="newEmployeeButton" Content="Dodaj pracownika"
                 Click="newEmployeeButton_Click" 

@@ -1,4 +1,5 @@
-﻿using ClassLibrary.DataAccess;
+﻿using ClassLibrary.Calculations.Helpers;
+using ClassLibrary.DataAccess;
 using ClassLibrary.DataAccess.CSV;
 using ClassLibrary.Models;
 using Microsoft.SqlServer.Server;
@@ -93,7 +94,6 @@ namespace WPFUI
                 IsReadOnly = true
             };
             mainGrid.Columns.Add(lastNameColumn);
-
             DataGridTextColumn firstNameColumn = new DataGridTextColumn
             {
                 Header = "Imię",
@@ -109,6 +109,13 @@ namespace WPFUI
                     Header = day.ToString(dateHeaderFormat),
                     Binding = new Binding(GetDatePropertyName(day))
                 };
+
+                // Set different colour for holidays columns
+                if (HolidayChecker.IsHoliday(day))
+                {
+                    Style style = (Style)mainGrid.FindResource("HolidayColumnStyle");
+                    column.ElementStyle = style;
+                }
                 mainGrid.Columns.Add(column);
             });
         }
