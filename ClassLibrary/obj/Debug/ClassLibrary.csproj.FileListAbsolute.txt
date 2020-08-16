@@ -1,6 +1,0 @@
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\bin\Debug\ClassLibrary.dll
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\bin\Debug\ClassLibrary.pdb
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\obj\Debug\ClassLibrary.csprojAssemblyReference.cache
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\obj\Debug\ClassLibrary.dll
-C:\Users\jaqbk\source\repos\DutyRoster\ClassLibrary\obj\Debug\ClassLibrary.pdb
