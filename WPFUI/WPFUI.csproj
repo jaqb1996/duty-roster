@@ -163,9 +163,9 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+    <ProjectReference Include="..\RosterLibrary\RosterLibrary.csproj">
       <Project>{26fbcfad-d831-4803-bf9c-71db0cd3a486}</Project>
-      <Name>ClassLibrary</Name>
+      <Name>RosterLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
-﻿using ClassLibrary.Calculations.Helpers;
-using ClassLibrary.DataAccess;
-using ClassLibrary.DataAccess.CSV;
-using ClassLibrary.Models;
+﻿using RosterLibrary.Calculations.Helpers;
+using RosterLibrary.DataAccess;
+using RosterLibrary.DataAccess.CSV;
+using RosterLibrary.Models;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections;

@@ -1,4 +1,4 @@
-﻿using ClassLibrary.Models;
+﻿using RosterLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-using ClassLibrary.DataAccess.CSV;
+using RosterLibrary.DataAccess.CSV;
 
 namespace WPFUI
 {

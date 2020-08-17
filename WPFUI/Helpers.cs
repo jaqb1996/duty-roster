@@ -1,4 +1,4 @@
-﻿using ClassLibrary.Models;
+﻿using RosterLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
-using ClassLibrary.DataAccess.CSV;
+using RosterLibrary.DataAccess.CSV;
 
 namespace WPFUI
 {

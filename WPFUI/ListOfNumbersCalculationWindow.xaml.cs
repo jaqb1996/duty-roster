@@ -1,5 +1,5 @@
-﻿using ClassLibrary.Calculations;
-using ClassLibrary.Models;
+﻿using RosterLibrary.Calculations;
+using RosterLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
