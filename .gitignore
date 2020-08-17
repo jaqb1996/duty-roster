@@ -361,5 +361,3 @@ FodyWeavers.xsd
 
 # SQLite Database
 *.db
-
-**/DutyRoster
