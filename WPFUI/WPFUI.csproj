@@ -111,6 +111,7 @@
       <DependentUpon>EditPlanForDayWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers.cs" />
+    <Compile Include="IDataRequestor.cs" />
     <Compile Include="ListOfNumbersCalculationWindow.xaml.cs">
       <DependentUpon>ListOfNumbersCalculationWindow.xaml</DependentUpon>
     </Compile>

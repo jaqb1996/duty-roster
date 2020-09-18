@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFUI"
         mc:Ignorable="d"
-        Title="Nowy pracownik" Height="430.001" Width="445.923" FontSize="18" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+        Title="Nowy pracownik" Height="430.001" Width="445.923" FontSize="18" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type Label}">

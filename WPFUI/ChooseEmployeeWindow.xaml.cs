@@ -18,16 +18,12 @@ namespace WPFUI
     /// <summary>
     /// Interaction logic for ChooseEmployeeWindow.xaml
     /// </summary>
-    public partial class ChooseEmployeeWindow : Window
+    public partial class ChooseEmployeeWindow : Window, IDataRequestor
     {
         public ChooseEmployeeWindow()
         {
             InitializeComponent();
-        }
 
-        private void Window_Activated(object sender, EventArgs e)
-        {
-            // Refresh list on Window_Activated event to reflect changes done by other windows
             RefreshListOfEmployees();
         }
         public void RefreshListOfEmployees()
@@ -43,6 +39,11 @@ namespace WPFUI
                 return;
             }
             availableEmployeesListbox.ItemsSource = employees;
+        }
+        // Refresh list of employees when data filled in other windowa is ready
+        public void DataReady()
+        {
+            RefreshListOfEmployees();
         }
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
@@ -82,8 +83,6 @@ namespace WPFUI
                 if (atLeastOneAdded)
                 {
                     Helpers.LoadAndRefreshSchedule(scheduleID);
-                    //AppResources.Schedule = AppResources.DataAccess.LoadSchedule(scheduleID);
-                    //((MainWindow)Application.Current.MainWindow).RefreshSchedule();
                     Close();
                 }
             }
@@ -98,7 +97,7 @@ namespace WPFUI
 
         private void NewEmployeeButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateEmployeeWindow window = new CreateEmployeeWindow();
+            CreateEmployeeWindow window = new CreateEmployeeWindow(this);
             window.Show();
         }
 
@@ -137,5 +136,7 @@ namespace WPFUI
             }
             return true;
         }
+
+        
     }
 }

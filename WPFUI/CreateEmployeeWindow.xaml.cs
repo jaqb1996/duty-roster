@@ -21,17 +21,24 @@ namespace WPFUI
     /// <summary>
     /// Interaction logic for CreateEmployeeWindow.xaml
     /// </summary>
-    public partial class CreateEmployeeWindow : Window
+    public partial class CreateEmployeeWindow : Window, IDataRequestor
     {
         List<IWorkingOption> availableOptions = new List<IWorkingOption>();
         ObservableCollection<IWorkingOption> addedOptions = new ObservableCollection<IWorkingOption>();
-        public CreateEmployeeWindow()
+        IDataRequestor dataRequestor;
+        public CreateEmployeeWindow(IDataRequestor requestor)
         {
             InitializeComponent();
 
+            dataRequestor = requestor;
             OptionsForEmployeeListBox.ItemsSource = addedOptions;
         }
-        private void Window_Activated(object sender, EventArgs e)
+        public void DataReady()
+        {
+            RefreshAvailableOptions();
+        }
+
+        private void RefreshAvailableOptions()
         {
             // Refresh available options on Window_Activated event to reflect changes done by other windows
             try
@@ -44,6 +51,7 @@ namespace WPFUI
             }
             AvailableOptionsComboBox.ItemsSource = availableOptions;
         }
+
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
         {
             // Do not add option if no item is selected or item has been already added
@@ -91,7 +99,8 @@ namespace WPFUI
                     Helpers.ShowGeneralError();
                 }
             }
-
+            // Inform dataRequestor(ChooseEmployeeWindow) that data is ready
+            dataRequestor.DataReady();
             Close();
         }
 
