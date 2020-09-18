@@ -183,14 +183,7 @@ namespace RosterLibrary.DataAccess.CSV
 
         public List<IEmployeePresentationData> ReadNamesOfAvailableEmployees()
         {
-            List<IEmployeePresentationData> output = new List<IEmployeePresentationData>();
-
-            fileHelper.ReadFile(EmployeesFile, (lineData) =>
-            {
-                output.Add(new Employee { Id = int.Parse(lineData[0]), FirstName = lineData[1], LastName = lineData[2] });
-            });
-
-            return output;
+            return GetEmployees();
         }
 
         public List<ISchedulePresentationData> ReadNamesOfAvailableSchedules()
