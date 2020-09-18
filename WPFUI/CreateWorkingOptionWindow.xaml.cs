@@ -19,9 +19,12 @@ namespace WPFUI
     /// </summary>
     public partial class CreateWorkingOptionWindow : Window
     {
-        public CreateWorkingOptionWindow()
+        IDataRequestor dataRequestor;
+        public CreateWorkingOptionWindow(IDataRequestor requestor)
         {
             InitializeComponent();
+
+            dataRequestor = requestor;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -47,6 +50,8 @@ namespace WPFUI
             {
                 Helpers.ShowGeneralError();
             }
+            // Inform dataRequestor (CreateEmployeeWindow) that WorkingOption had been added to the database
+            dataRequestor.DataReady();
             Close();
         }
     }

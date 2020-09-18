@@ -32,6 +32,7 @@ namespace WPFUI
 
             dataRequestor = requestor;
             OptionsForEmployeeListBox.ItemsSource = addedOptions;
+            RefreshAvailableOptions();
         }
         public void DataReady()
         {
@@ -40,7 +41,7 @@ namespace WPFUI
 
         private void RefreshAvailableOptions()
         {
-            // Refresh available options on Window_Activated event to reflect changes done by other windows
+            // Refresh available options
             try
             {
                 availableOptions = AppResources.DataAccess.ReadAvailableWorkingOptions();
@@ -114,7 +115,7 @@ namespace WPFUI
 
         private void NewOptionButton_Click(object sender, RoutedEventArgs e)
         {
-            CreateWorkingOptionWindow window = new CreateWorkingOptionWindow();
+            CreateWorkingOptionWindow window = new CreateWorkingOptionWindow(this);
             window.ShowDialog();
         }
 
