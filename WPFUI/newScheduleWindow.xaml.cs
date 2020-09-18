@@ -52,16 +52,7 @@ namespace WPFUI
                 MessageBox.Show("Pierwszy dzień grafiku musi być przed ostatnim dniem", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            try
-            {
-                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
-            }
-            catch (Exception)
-            {
-                Helpers.ShowGeneralError();
-            }
-
-            ((MainWindow)Application.Current.MainWindow).RefreshSchedule();
+            Helpers.LoadAndRefreshSchedule(id);
             Close();
 
         }
