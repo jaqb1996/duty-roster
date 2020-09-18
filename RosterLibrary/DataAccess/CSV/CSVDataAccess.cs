@@ -188,15 +188,7 @@ namespace RosterLibrary.DataAccess.CSV
 
         public List<ISchedulePresentationData> ReadNamesOfAvailableSchedules()
         {
-            List<ISchedulePresentationData> output = new List<ISchedulePresentationData>();
-
-            fileHelper.ReadFile(SchedulesFile, (lineData) =>
-            {
-                output.Add(new Schedule { Id = int.Parse(lineData[0]), Name = lineData[1], 
-                    StartingDay = DateTime.Parse(lineData[2]), LastDay = DateTime.Parse(lineData[3]) });
-            });
-
-            return output;
+            return GetSchedules();
         }
 
         public void SaveSchedule(ISchedule schedule)
