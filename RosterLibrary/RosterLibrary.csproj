@@ -47,6 +47,7 @@
     <Compile Include="Calculations\ICalculatorReturningListOfNumbers.cs" />
     <Compile Include="Calculations\ICalculatorReturningNumberForEmployee.cs" />
     <Compile Include="Calculations\WeekHoursCalculator.cs" />
+    <Compile Include="DataAccess\CommonFunctionality.cs" />
     <Compile Include="DataAccess\CSV\CSVDataAccess.Savers.cs" />
     <Compile Include="DataAccess\CSV\CSVDataAccess.Helpers.cs" />
     <Compile Include="DataAccess\CSV\CSVDataAccess.cs" />

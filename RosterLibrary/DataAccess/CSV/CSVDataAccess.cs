@@ -26,6 +26,8 @@ namespace RosterLibrary.DataAccess.CSV
 
         readonly string dateFormat = "yyyy-MM-dd";
         readonly string defaultTime = "00:00";
+
+        CommonFunctionality common = new CommonFunctionality();
         public CSVDataAccess()
         {
             fileHelper = new FileHelper(DataPath, SchedulesFile, WorkingPlanFile, EmployeesFile, AllWorkingOptionsFile, WorkingOptionsOfEmployeeFile, ',');
@@ -139,7 +141,7 @@ namespace RosterLibrary.DataAccess.CSV
             // Fill in the list of employees with available options
             List<IEmployee> employees = new List<IEmployee>();
             List<WorkingOptionOfEmployee> workingOptionOfEmployees = GetWorkingOptionOfEmployees();
-            List<WorkingOption> workingOptions = GetWorkingOptions();
+            List<IWorkingOption> workingOptions = GetWorkingOptions();
             foreach (IEmployee employee in employeesWithoutWorkingPlan)
             {
                 List<IWorkingOption> options = (from i in workingOptionOfEmployees
@@ -173,12 +175,7 @@ namespace RosterLibrary.DataAccess.CSV
 
         public List<IWorkingOption> ReadAvailableWorkingOptions()
         {
-            List<IWorkingOption> output = new List<IWorkingOption>();
-            foreach (var option in GetWorkingOptions())
-            {
-                output.Add(option);
-            }
-            return output;
+            return GetWorkingOptions();
         }
 
         public List<IEmployeePresentationData> ReadNamesOfAvailableEmployees()
@@ -193,25 +190,7 @@ namespace RosterLibrary.DataAccess.CSV
 
         public void SaveSchedule(ISchedule schedule)
         {
-            List<WorkingPlan> oldPlans = GetWorkingPlans();
-            List<WorkingPlan> newPlans = new List<WorkingPlan>();
-            foreach (WorkingPlan plan in oldPlans)
-            {
-                if (plan.ScheduleID == schedule.Id) continue;
-                newPlans.Add(plan);
-            }
-            foreach (IEmployee emp in schedule.Employees)
-            {
-                // Validate symbol for each plan
-                emp.WorkingPlan.ForEach(o => CheckInputStrings(SymbolPattern, o.Symbol));
-                newPlans.Add(new WorkingPlan()
-                {
-                    ScheduleID = schedule.Id,
-                    EmployeeID = emp.Id,
-                    WorkingOptions = emp.WorkingPlan
-                });
-            }
-            SaveWorkingPlans(newPlans);
+            common.SaveSchedule(schedule, GetWorkingPlans, SaveWorkingPlans, CheckInputStrings, SymbolPattern);
         }
 
         public void DeleteSchedule(int scheduleID)

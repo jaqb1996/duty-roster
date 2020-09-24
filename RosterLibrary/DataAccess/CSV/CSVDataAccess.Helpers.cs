@@ -38,9 +38,9 @@ namespace RosterLibrary.DataAccess.CSV
             });
             return output;
         }
-        private List<WorkingOption> GetWorkingOptions()
+        private List<IWorkingOption> GetWorkingOptions()
         {
-            List<WorkingOption> output = new List<WorkingOption>();
+            List<IWorkingOption> output = new List<IWorkingOption>();
             fileHelper.ReadFile(AllWorkingOptionsFile, (lineData) =>
             {
                 int id = int.Parse(lineData[0]);
