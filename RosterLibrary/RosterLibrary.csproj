@@ -56,7 +56,7 @@
     <Compile Include="DataAccess\Models\WorkingOption.cs" />
     <Compile Include="DataAccess\Models\WorkingOptionOfEmployee.cs" />
     <Compile Include="DataAccess\Models\WorkingPlan.cs" />
-    <Compile Include="DataAccess\Helpers\FileHelper.cs" />
+    <Compile Include="DataAccess\CSV\FileHelper.cs" />
     <Compile Include="DataAccess\Helpers\ScheduleHelper.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
     <Compile Include="Models\IEmployeePresentationData.cs" />
