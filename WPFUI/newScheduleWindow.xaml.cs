@@ -1,5 +1,4 @@
-﻿using RosterLibrary.DataAccess.CSV;
-using RosterLibrary;
+﻿using RosterLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +34,9 @@ namespace WPFUI
         private void CreateScheduleButton_Click(object sender, RoutedEventArgs e)
         {
             string name = NewScheduleName.Text;
-            if (FirstDayPicker.SelectedDate == null || LastDayPicker.SelectedDate == null || !Regex.IsMatch(name, CSVDataAccess.NamePattern))
+            if (FirstDayPicker.SelectedDate == null || LastDayPicker.SelectedDate == null)
             {
-                MessageBox.Show("Wybierz nazwę we właściwym formacie oraz pierwszy i ostatni dzień grafiku", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Wybierz pierwszy i ostatni dzień grafiku", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -47,6 +46,11 @@ namespace WPFUI
             try
             {
                 id = GlobalAccess.DataAccess.CreateSchedule(name, startingDay, lastDay);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Wybierz nazwę we właściwym formacie", "Nieprawidłowe dane", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
             catch (ArgumentException)
             {
