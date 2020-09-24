@@ -1,6 +1,6 @@
 ﻿using RosterLibrary.Models;
 
-namespace RosterLibrary.DataAccess.CSV.Models
+namespace RosterLibrary.DataAccess.Models
 {
     class Employee : IEmployeePresentationData
     {

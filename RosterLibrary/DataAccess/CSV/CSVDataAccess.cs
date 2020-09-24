@@ -1,4 +1,4 @@
-﻿using RosterLibrary.DataAccess.CSV.Models;
+﻿using RosterLibrary.DataAccess.Models;
 using RosterLibrary.DataAccess.Helpers;
 using RosterLibrary.Helpers;
 using RosterLibrary.Models;

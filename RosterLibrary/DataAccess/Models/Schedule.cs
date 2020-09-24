@@ -1,7 +1,7 @@
 ﻿using RosterLibrary.Models;
 using System;
 
-namespace RosterLibrary.DataAccess.CSV.Models
+namespace RosterLibrary.DataAccess.Models
 {
     class Schedule : ISchedulePresentationData
     {

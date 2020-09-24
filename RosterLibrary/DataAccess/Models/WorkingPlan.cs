@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RosterLibrary.DataAccess.CSV.Models
+namespace RosterLibrary.DataAccess.Models
 {
     class WorkingPlan
     {

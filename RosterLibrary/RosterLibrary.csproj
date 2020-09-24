@@ -51,11 +51,11 @@
     <Compile Include="DataAccess\CSV\CSVDataAccess.Savers.cs" />
     <Compile Include="DataAccess\CSV\CSVDataAccess.Helpers.cs" />
     <Compile Include="DataAccess\CSV\CSVDataAccess.cs" />
-    <Compile Include="DataAccess\CSV\Models\Employee.cs" />
-    <Compile Include="DataAccess\CSV\Models\Schedule.cs" />
-    <Compile Include="DataAccess\CSV\Models\WorkingOption.cs" />
-    <Compile Include="DataAccess\CSV\Models\WorkingOptionOfEmployee.cs" />
-    <Compile Include="DataAccess\CSV\Models\WorkingPlan.cs" />
+    <Compile Include="DataAccess\Models\Employee.cs" />
+    <Compile Include="DataAccess\Models\Schedule.cs" />
+    <Compile Include="DataAccess\Models\WorkingOption.cs" />
+    <Compile Include="DataAccess\Models\WorkingOptionOfEmployee.cs" />
+    <Compile Include="DataAccess\Models\WorkingPlan.cs" />
     <Compile Include="DataAccess\Helpers\FileHelper.cs" />
     <Compile Include="DataAccess\Helpers\ScheduleHelper.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
