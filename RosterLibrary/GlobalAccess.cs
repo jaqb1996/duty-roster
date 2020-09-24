@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFUI
+namespace RosterLibrary
 {
     public static class GlobalAccess
     {

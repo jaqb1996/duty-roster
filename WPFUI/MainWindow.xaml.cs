@@ -1,6 +1,5 @@
 ﻿using RosterLibrary.Calculations.Helpers;
-using RosterLibrary.DataAccess;
-using RosterLibrary.DataAccess.CSV;
+using RosterLibrary;
 using RosterLibrary.Models;
 using Microsoft.SqlServer.Server;
 using System;

@@ -59,6 +59,7 @@
     <Compile Include="DataAccess\CSV\FileHelper.cs" />
     <Compile Include="DataAccess\Helpers\ScheduleHelper.cs" />
     <Compile Include="DataAccess\IDataAccess.cs" />
+    <Compile Include="GlobalAccess.cs" />
     <Compile Include="Models\IEmployeePresentationData.cs" />
     <Compile Include="Models\ISchedule.cs" />
     <Compile Include="Models\ISchedulePresentationData.cs" />
