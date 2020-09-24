@@ -132,44 +132,19 @@ namespace RosterLibrary.DataAccess.CSV
             // Get list of employees (without available working options for now)
             List<WorkingPlan> plans = GetWorkingPlans();
             List<IEmployeePresentationData> employeeData = GetEmployees();
-            List<IEmployee> employeesWithoutWorkingPlan = (from p in plans
-                                                           where p.ScheduleID == output.Id
-                                                           join e in employeeData
-                                                           on p.EmployeeID equals e.Id
-                                                           select output.CreateEmployee(e.Id, e.FirstName, e.LastName)).ToList();
+            List<IEmployee> employeesWithoutWorkingPlan = common.GetEmployeesWithoutWorkingPlan(plans, employeeData, output);
 
             // Fill in the list of employees with available options
             List<IEmployee> employees = new List<IEmployee>();
             List<WorkingOptionOfEmployee> workingOptionOfEmployees = GetWorkingOptionOfEmployees();
             List<IWorkingOption> workingOptions = GetWorkingOptions();
-            foreach (IEmployee employee in employeesWithoutWorkingPlan)
-            {
-                List<IWorkingOption> options = (from i in workingOptionOfEmployees
-                                                where i.EmployeeID == employee.Id
-                                                join o in workingOptions
-                                                on i.WorkingOptionID equals o.Id
-                                                select new WorkingOptionModel(o.Symbol, o.WorkingTime, o.StartingHour) as IWorkingOption).ToList();
-                employees.Add(output.CreateEmployee(employee.Id, employee.FirstName, employee.LastName, options));
-            }
+            common.FillEmployeesWithWorkingOptions(employees, employeesWithoutWorkingPlan, workingOptionOfEmployees, workingOptions, output);
 
             // Add each employee to output schedule
             employees.ForEach(e => output.AddEmployee(e));
 
             // Get working plan for each employee
-            foreach (IEmployee employee in employees)
-            {
-                List<IWorkingOption> workingPlan = (from p in plans
-                                                    where p.EmployeeID == employee.Id && p.ScheduleID == output.Id
-                                                    select p.WorkingOptions).Single();
-
-                // Fill in output schedule with plans for each day
-                int i = 0;
-                output.IterateOverAllDays((day) =>
-                {
-                    IWorkingOption planForDay = workingPlan[i++];
-                    output.ChangeWorkDay(employee.Id, day, planForDay.Symbol, planForDay.StartingHour, planForDay.WorkingTime);
-                });
-            }
+            common.GetWorkingPlanForEmployees(employees, plans, output);
             return output;
         }
 
