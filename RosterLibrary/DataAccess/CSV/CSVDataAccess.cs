@@ -211,6 +211,10 @@ namespace RosterLibrary.DataAccess.CSV
             employees.Where(x => x.Id != employeeID).ToList().ForEach(x => newEmployees.Add(x as Employee));
             SaveEmployees(newEmployees);
         }
-        
+
+        public void CheckScheduleSymbol(string symbol)
+        {
+            CheckInputStrings(SymbolPattern, symbol);
+        }
     }
 }

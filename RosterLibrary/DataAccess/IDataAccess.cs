@@ -90,5 +90,10 @@ namespace RosterLibrary.DataAccess
         /// <param name="employeeID"></param>
         /// <param name="scheduleID"></param>
         void DeleteEmployeeFromSchedule(int employeeID, int scheduleID);
+        /// <summary>
+        /// Checks symbol of schedule and throws FormatException if symbol forbidden
+        /// </summary>
+        /// <param name="symbol">Symbol to be checked</param>
+        void CheckScheduleSymbol(string symbol);
     }
 }

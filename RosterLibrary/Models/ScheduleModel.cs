@@ -1,4 +1,5 @@
-﻿using RosterLibrary.DataAccess.CSV;
+﻿using RosterLibrary;
+using RosterLibrary.DataAccess.CSV;
 using RosterLibrary.Helpers;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace RosterLibrary.Models
         }
         public void ChangeWorkDay( int employeeID, DateTime date, string symbol, DateTime startingHour, TimeSpan workingTime)
         {
-            CSVDataAccess.CheckInputStrings(CSVDataAccess.SymbolPattern, symbol);
+            GlobalAccess.DataAccess.CheckScheduleSymbol(symbol);
             int employeeIndex = GetEmployeeIndex(employeeID);
             int index = this.GetIndexOfDate(date);
             Employees[employeeIndex].ChangeWorkDay(index, symbol, startingHour, workingTime);
