@@ -45,7 +45,7 @@ namespace WPFUI
             int id;
             try
             {
-                id = AppResources.DataAccess.CreateSchedule(name, startingDay, lastDay);
+                id = GlobalAccess.DataAccess.CreateSchedule(name, startingDay, lastDay);
             }
             catch (ArgumentException)
             {

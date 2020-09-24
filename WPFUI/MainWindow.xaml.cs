@@ -66,7 +66,7 @@ namespace WPFUI
         /// </summary>
         public void RefreshSchedule()
         {
-            if (AppResources.Schedule != null)
+            if (GlobalAccess.Schedule != null)
             {
                 mainGrid.Columns.Clear();
 
@@ -76,7 +76,7 @@ namespace WPFUI
 
                 mainGrid.ItemsSource = rows;
                 
-                scheduleTitle.Text = $"Grafik \"{AppResources.Schedule.Name}\"";
+                scheduleTitle.Text = $"Grafik \"{GlobalAccess.Schedule.Name}\"";
 
             }
         }
@@ -102,7 +102,7 @@ namespace WPFUI
             };
             mainGrid.Columns.Add(firstNameColumn);
 
-            AppResources.Schedule.IterateOverAllDays((day) =>
+            GlobalAccess.Schedule.IterateOverAllDays((day) =>
             {
                 DataGridTextColumn column = new DataGridTextColumn
                 {
@@ -127,7 +127,7 @@ namespace WPFUI
         {
             rows = new List<ExpandoObject>();
             // Generate row for each employee
-            foreach (IEmployee employee in AppResources.Schedule.Employees)
+            foreach (IEmployee employee in GlobalAccess.Schedule.Employees)
             {
                 dynamic row = new ExpandoObject();
                 ((IDictionary<string, object>)row).Add(idPropertyName, employee.Id);
@@ -135,7 +135,7 @@ namespace WPFUI
                 ((IDictionary<string, object>)row).Add(Helpers.firstNamePropertyName, employee.FirstName);
                 int i = 0;
                 // Generate as many fiels as schedule has days
-                AppResources.Schedule.IterateOverAllDays((day) =>
+                GlobalAccess.Schedule.IterateOverAllDays((day) =>
                 {
                     // Leave empty space for default value
                     ((IDictionary<string, object>)row).Add(GetDatePropertyName(day), employee.WorkingPlan[i].Symbol == "W" ? "" : employee.WorkingPlan[i].Symbol);
@@ -162,7 +162,7 @@ namespace WPFUI
 
         private void newEmployeeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (AppResources.Schedule == null)
+            if (GlobalAccess.Schedule == null)
             {
                 MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -192,7 +192,7 @@ namespace WPFUI
             {
                 try
                 {
-                    AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                    GlobalAccess.DataAccess.SaveSchedule(GlobalAccess.Schedule);
                     SetNoLongerModified();
                 }
                 catch (Exception)
@@ -217,7 +217,7 @@ namespace WPFUI
         }
         private bool CheckScheduleExistence()
         {
-            if (AppResources.Schedule == null)
+            if (GlobalAccess.Schedule == null)
             {
                 MessageBox.Show("Najpierw załaduj grafik", "Brak wybranego grafika", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
@@ -246,7 +246,7 @@ namespace WPFUI
                     case MessageBoxResult.Yes:
                         try
                         {
-                            AppResources.DataAccess.SaveSchedule(AppResources.Schedule);
+                            GlobalAccess.DataAccess.SaveSchedule(GlobalAccess.Schedule);
                             SetNoLongerModified();
                         }
                         catch (Exception)
@@ -275,8 +275,8 @@ namespace WPFUI
                 return;
             try
             {
-                AppResources.DataAccess.DeleteSchedule(AppResources.Schedule.Id);
-                AppResources.Schedule = null;
+                GlobalAccess.DataAccess.DeleteSchedule(GlobalAccess.Schedule.Id);
+                GlobalAccess.Schedule = null;
                 // Clear columns to protect from using nonexistent schedule
                 mainGrid.Columns.Clear();
                 scheduleTitle.Text = "Nie wczytano grafiku";
@@ -320,8 +320,8 @@ namespace WPFUI
             // Delete employee
             try
             {
-                int scheduleID = AppResources.Schedule.Id;
-                AppResources.DataAccess.DeleteEmployeeFromSchedule(employeeID, scheduleID);
+                int scheduleID = GlobalAccess.Schedule.Id;
+                GlobalAccess.DataAccess.DeleteEmployeeFromSchedule(employeeID, scheduleID);
                 Helpers.LoadAndRefreshSchedule(scheduleID);
             }
             catch (Exception)

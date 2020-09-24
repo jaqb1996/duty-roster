@@ -31,7 +31,7 @@ namespace WPFUI
             ResultDataGrid.Columns[2].Header = calculator.ResultName;
 
             // Make calculation
-            Dictionary<IEmployeePresentationData, double> results = calculator.Calculate(AppResources.Schedule);
+            Dictionary<IEmployeePresentationData, double> results = calculator.Calculate(GlobalAccess.Schedule);
 
 
             // Prepare list of employeeDisplayData

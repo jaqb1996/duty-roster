@@ -28,7 +28,7 @@ namespace WPFUI
         {
             try
             {
-                AppResources.Schedule = AppResources.DataAccess.LoadSchedule(id);
+                GlobalAccess.Schedule = GlobalAccess.DataAccess.LoadSchedule(id);
             }
             catch (Exception ex)
             {

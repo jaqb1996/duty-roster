@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace WPFUI
 {
-    public static class AppResources
+    public static class GlobalAccess
     {
         public static ISchedule Schedule { get; set; }
         public static IDataAccess DataAccess { get; }
-        static AppResources()
+        static GlobalAccess()
         {
             Schedule = null;
             DataAccess = new CSVDataAccess();

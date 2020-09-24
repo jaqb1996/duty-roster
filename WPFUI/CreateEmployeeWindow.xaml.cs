@@ -44,7 +44,7 @@ namespace WPFUI
             // Refresh available options
             try
             {
-                availableOptions = AppResources.DataAccess.ReadAvailableWorkingOptions();
+                availableOptions = GlobalAccess.DataAccess.ReadAvailableWorkingOptions();
             }
             catch (Exception)
             {
@@ -75,7 +75,7 @@ namespace WPFUI
             try
             {
                 // Add employee to database
-                employeeID = AppResources.DataAccess.AddEmployee(firstName, lastName);
+                employeeID = GlobalAccess.DataAccess.AddEmployee(firstName, lastName);
             }
             catch (ArgumentException)
             {
@@ -93,7 +93,7 @@ namespace WPFUI
             {
                 try
                 {
-                    AppResources.DataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
+                    GlobalAccess.DataAccess.AddWorkingOptionToEmployee(employeeID, option.Id);
                 }
                 catch (Exception)
                 {

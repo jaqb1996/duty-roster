@@ -28,7 +28,7 @@ namespace WPFUI
             List<ISchedulePresentationData> schedules;
             try
             {
-                schedules = AppResources.DataAccess.ReadNamesOfAvailableSchedules();
+                schedules = GlobalAccess.DataAccess.ReadNamesOfAvailableSchedules();
             }
             catch (Exception)
             {

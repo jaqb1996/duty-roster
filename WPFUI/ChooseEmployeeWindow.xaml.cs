@@ -31,7 +31,7 @@ namespace WPFUI
             List<IEmployeePresentationData> employees;
             try
             {
-                employees = AppResources.DataAccess.ReadNamesOfAvailableEmployees();
+                employees = GlobalAccess.DataAccess.ReadNamesOfAvailableEmployees();
             }
             catch (Exception)
             {
@@ -54,14 +54,14 @@ namespace WPFUI
         {
             if (!CheckEmployeeSelected())
                 return;
-            int scheduleID = AppResources.Schedule.Id;
+            int scheduleID = GlobalAccess.Schedule.Id;
             bool atLeastOneAdded = false;
             foreach (object emp in availableEmployeesListbox.SelectedItems)
             {
                 var employee = ((IEmployeePresentationData)emp);
                 try
                 {
-                    AppResources.DataAccess.AddEmployeeToSchedule(scheduleID, employee.Id);
+                    GlobalAccess.DataAccess.AddEmployeeToSchedule(scheduleID, employee.Id);
                     atLeastOneAdded = true;
                 }
                 catch (InvalidOperationException)
@@ -117,7 +117,7 @@ namespace WPFUI
             // Delete employee
             try
             {
-                AppResources.DataAccess.DeleteEmployee(emp.Id);
+                GlobalAccess.DataAccess.DeleteEmployee(emp.Id);
             }
             catch (Exception)
             {
@@ -125,7 +125,7 @@ namespace WPFUI
                 return;
             }
             RefreshListOfEmployees();
-            Helpers.LoadAndRefreshSchedule(AppResources.Schedule.Id);
+            Helpers.LoadAndRefreshSchedule(GlobalAccess.Schedule.Id);
         }
         private bool CheckEmployeeSelected()
         {

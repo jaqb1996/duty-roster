@@ -33,7 +33,7 @@ namespace WPFUI
             columnHeaderCommonPart = calculator.ResultName;
 
             // Make calculation
-            Dictionary<IEmployeePresentationData, List<double>> results = calculator.Calculate(AppResources.Schedule);
+            Dictionary<IEmployeePresentationData, List<double>> results = calculator.Calculate(GlobalAccess.Schedule);
 
             // Generate columns for last and first name 
             DataGridTextColumn lastNameColumn = new DataGridTextColumn

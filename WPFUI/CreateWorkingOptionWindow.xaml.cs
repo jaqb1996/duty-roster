@@ -39,7 +39,7 @@ namespace WPFUI
             {
                 DateTime startingHour = new DateTime(1, 1, 1, int.Parse(StartingHourTextBox.Text), int.Parse(StartingMinuteTextBox.Text), 0);
                 TimeSpan workingTime = new TimeSpan(int.Parse(WorkingTimeHourTextBox.Text), int.Parse(WorkingTimeMinuteTextBox.Text), 0);
-                AppResources.DataAccess.AddWorkingOption(symbol, startingHour, workingTime);
+                GlobalAccess.DataAccess.AddWorkingOption(symbol, startingHour, workingTime);
             }
             catch (FormatException)
             {

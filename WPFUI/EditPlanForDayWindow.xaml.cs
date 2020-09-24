@@ -32,7 +32,7 @@ namespace WPFUI
             DateTextBlock.Text = date.ToString("dd.MM.yyyy");
 
             // Fill fields with current values if already modified
-            IWorkingOption plan = AppResources.Schedule.PlanForDay(employeeId, date);
+            IWorkingOption plan = GlobalAccess.Schedule.PlanForDay(employeeId, date);
             string symbol = plan.Symbol;
             if (symbol != WorkingOptionModel.DefaultSymbol)
             {
@@ -71,7 +71,7 @@ namespace WPFUI
             {
                 DateTime startingHour = new DateTime(1, 1, 1, int.Parse(StartingHourTextBox.Text), int.Parse(StartingMinuteTextBox.Text), 0);
                 TimeSpan workingTime = new TimeSpan(int.Parse(WorkingTimeHourTextBox.Text), int.Parse(WorkingTimeMinuteTextBox.Text), 0);
-                AppResources.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
+                GlobalAccess.Schedule.ChangeWorkDay(employeeId, date, symbol, startingHour, workingTime);
             }
             catch (FormatException)
             {
@@ -97,7 +97,7 @@ namespace WPFUI
             if (SymbolTextBox.Text == "")
                 return;
             // Fill starting hour and working time if employee has default working option with chosen symbol 
-            IEmployee employee = (from emp in AppResources.Schedule.Employees where emp.Id == employeeId select emp).Single();
+            IEmployee employee = (from emp in GlobalAccess.Schedule.Employees where emp.Id == employeeId select emp).Single();
 
             foreach (IWorkingOption option in employee.AvailableOptions)
             {
